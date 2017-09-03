@@ -129,37 +129,16 @@ LargeInvader::LargeInvader(StudentWorld* world, int start_x, int start_y, int im
 : Spaceship(world, start_x, start_y, image_id, image_size), m_direction(dir), m_next_direction(0), m_can_move(0) { world->add_actor(this); }
 
 void LargeInvader::do_something(void)
-{
-//  static int play_sound = 0;
-//  static int can_play = 0;
-  
+{  
   if (!is_alive()) { return; } // Check the current status of the invader object
   
   if (get_can_move_status() < 20) { update_can_move_status(1); return; }
   else { set_can_move_status(0); }
 
-//  if (can_play < 3)
-//  {
-//    can_play++;
-//  }
-//  else
-//  {
-//    can_play = 0;
-//    switch (play_sound)
-//    {
-//      case 0: invader_world->play_sound(SOUND_ALIEN_MOVE_1); play_sound = 1; break;
-//      case 1: invader_world->play_sound(SOUND_ALIEN_MOVE_2); play_sound = 2; break;
-//      case 2: invader_world->play_sound(SOUND_ALIEN_MOVE_3); play_sound = 3; break;
-//      case 3: invader_world->play_sound(SOUND_ALIEN_MOVE_4); play_sound = 0; break;
-//      default:
-//        break;
-//    }
-//  }
+  StudentWorld* invader_world = world(); // Grab a pointer to the StudentWorld
 
   int x = get_x(), y = get_y(); // Get the current coordinates of the invader object
-  
-  StudentWorld* invader_world = world(); // Get pointer to the StudentWorld
-  
+    
   if (!is_alive()) { return; } // Check the current status of the invader object
   
   // Update invader movement
@@ -188,13 +167,13 @@ void LargeInvader::do_something(void)
   if (invader_world->get_invader_laser_count() < 3)
   {
     // Chance an invader will shoot a laser
-    if (rand() % 80 == 1)
+    if (rand() % 150 == 1)
     {
       // Chance it is a faster laser
-      if (rand() % 30 == 1)
+      if (rand() % 75 == 1)
       {
         // Fast laser
-        if (rand() % 10 == 1)
+        if (rand() % 15 == 1)
         {
           new FastLaser(invader_world, x, y - 1, Laser::LaserClass::fast_laser);
         }
@@ -226,7 +205,7 @@ int LargeInvader::get_movement_direction(void) { if (this == nullptr) { return -
 
 int LargeInvader::get_next_movement_direction(void) { return m_next_direction; }
 
-int LargeInvader::get_can_move_status(void) const { return m_can_move; }
+int LargeInvader::get_can_move_status(void) const { if (this == nullptr) { return -1; } return m_can_move; }
 
 LargeInvader::~LargeInvader() { world()->update_current_invader_count(-1); }
         
@@ -277,7 +256,7 @@ FlyingSaucer::~FlyingSaucer() { world()->update_flying_saucer_count(false); }
 ///////////////////////////////////////////////////////////////////////////
 
 Laser::Laser(StudentWorld* world, int start_x, int start_y, Laser::LaserClass laser_class, int image_id, Direction dir)
-: Actor(world, image_id, start_x, start_y, dir, 0.50, 1), m_spaceship_laser(laser_class)
+: Actor(world, image_id, start_x, start_y, dir, 0.4, 1), m_spaceship_laser(laser_class)
 {
   world->add_actor(this);
   world->play_sound(SOUND_LASER);

@@ -73,6 +73,25 @@ int StudentWorld::move()
     m_actors[i]->do_something();
   }
   
+  // Play invader sounds
+  static int play_invader_sound = 0;
+  for (int i = 0; i < m_actors.size(); i++)
+  {
+    if (dynamic_cast<LargeInvader*>(m_actors[i])->get_can_move_status() == 0)
+    {
+      switch (play_invader_sound)
+      {
+        case 0: play_sound(SOUND_ALIEN_MOVE_1); play_invader_sound = 1; break;
+        case 1: play_sound(SOUND_ALIEN_MOVE_2); play_invader_sound = 2; break;
+        case 2: play_sound(SOUND_ALIEN_MOVE_3); play_invader_sound = 3; break;
+        case 3: play_sound(SOUND_ALIEN_MOVE_4); play_invader_sound = 0; break;
+        default:
+          break;
+      }
+      break;
+    }
+  }
+  
   // After letting all actors make a move, check to see if invaders should move down on the next turn
   static int counter = 0;
   bool move_down = false;
