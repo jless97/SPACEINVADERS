@@ -35,6 +35,7 @@ public:
   virtual void do_something() = 0;
   bool is_alive(void);
   void set_dead(void);
+  void set_alive(void);
   StudentWorld* world(void);
   virtual ~Actor();
   

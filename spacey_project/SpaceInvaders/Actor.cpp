@@ -35,6 +35,8 @@ bool Actor::is_alive(void) { return m_alive; }
 
 void Actor::set_dead(void) { m_alive = false; set_visible(false); }
 
+void Actor::set_alive(void) { m_alive = true; set_visible(true); }
+
 StudentWorld* Actor::world(void) { return m_world; }
 
 Actor::~Actor() { set_visible(false); }

@@ -65,7 +65,7 @@ int StudentWorld::move()
 {
   update_scoreboard(); // Update scoreboard
   
-  m_spaceship->do_something(); // Give the player a chance to do something
+  if (m_spaceship->is_alive()) { m_spaceship->do_something(); } // Give the player a chance to do something
   
   // Give all other actors a chance to do something
   for (int i = 0; i < m_actors.size(); i++)
@@ -109,10 +109,11 @@ int StudentWorld::move()
   }
   
   // If the player died during this tick, decrement lives, and if out of lives (GameWorld goes to game over screen)
+  static int wait_to_spawn = 0;
   if (!m_spaceship->is_alive())
   {
-    dec_lives();
-    return GWSTATUS_PLAYER_DIED;
+    if (wait_to_spawn < 50) { wait_to_spawn++; }
+    else { wait_to_spawn = 0; m_spaceship->set_alive(); }
   }
   
   // If the player destroyed all 55 aliens in a round, then advance to the next round
@@ -315,13 +316,20 @@ void StudentWorld::check_collision(Actor* actor, bool is_player, bool is_invader
     }
   }
   // Check if invader laser hits the player spaceship /// TODO: barrier too
+  int count = 0;
   if (is_invader)
   {
     // Invader projectile hit player spaceship
     if (actor->get_x() >= m_spaceship->get_x() - 2 && actor->get_x() <= m_spaceship->get_x() + 2 &&
         actor->get_y() + 2 >= m_spaceship->get_y() && actor->get_y() - 2 <= m_spaceship->get_y())
     {
+      actor->set_dead();
       m_spaceship->set_dead();
+      if (count == 0)
+      {
+        count = 1;
+        dec_lives();
+      }
       new PlayerExplosion(this, actor->get_x(), actor->get_y());
       play_sound(SOUND_PLAYER_KILLED);
     }
