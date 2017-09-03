@@ -1,0 +1,313 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		03A68E281F5A603D00CA3CF8 /* Actor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 03A68E231F5A603D00CA3CF8 /* Actor.cpp */; };
+		03A68E291F5A603D00CA3CF8 /* GameController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 03A68E241F5A603D00CA3CF8 /* GameController.cpp */; };
+		03A68E2A1F5A603D00CA3CF8 /* GameWorld.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 03A68E251F5A603D00CA3CF8 /* GameWorld.cpp */; };
+		03A68E2B1F5A603D00CA3CF8 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 03A68E261F5A603D00CA3CF8 /* main.cpp */; };
+		03A68E2C1F5A603D00CA3CF8 /* StudentWorld.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 03A68E271F5A603D00CA3CF8 /* StudentWorld.cpp */; };
+		4B5BB2801A911630009A9A96 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B5BB27F1A911630009A9A96 /* OpenGL.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		4B5BB25F1A9110AA009A9A96 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		03A68E231F5A603D00CA3CF8 /* Actor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.cpp.cpp; name = Actor.cpp; path = SpaceInvaders/Actor.cpp; sourceTree = SOURCE_ROOT; tabWidth = 2; };
+		03A68E241F5A603D00CA3CF8 /* GameController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.cpp.cpp; name = GameController.cpp; path = SpaceInvaders/GameController.cpp; sourceTree = SOURCE_ROOT; tabWidth = 2; };
+		03A68E251F5A603D00CA3CF8 /* GameWorld.cpp */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.cpp.cpp; name = GameWorld.cpp; path = SpaceInvaders/GameWorld.cpp; sourceTree = SOURCE_ROOT; tabWidth = 2; };
+		03A68E261F5A603D00CA3CF8 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = SpaceInvaders/main.cpp; sourceTree = SOURCE_ROOT; };
+		03A68E271F5A603D00CA3CF8 /* StudentWorld.cpp */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.cpp.cpp; name = StudentWorld.cpp; path = SpaceInvaders/StudentWorld.cpp; sourceTree = SOURCE_ROOT; tabWidth = 2; };
+		03A68E2D1F5A605400CA3CF8 /* Actor.h */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.c.h; name = Actor.h; path = SpaceInvaders/Actor.h; sourceTree = SOURCE_ROOT; tabWidth = 2; };
+		03A68E2E1F5A605400CA3CF8 /* freeglut_ext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = freeglut_ext.h; path = SpaceInvaders/freeglut_ext.h; sourceTree = SOURCE_ROOT; };
+		03A68E2F1F5A605400CA3CF8 /* freeglut_std.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = freeglut_std.h; path = SpaceInvaders/freeglut_std.h; sourceTree = SOURCE_ROOT; };
+		03A68E301F5A605400CA3CF8 /* freeglut.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = freeglut.h; path = SpaceInvaders/freeglut.h; sourceTree = SOURCE_ROOT; };
+		03A68E311F5A605400CA3CF8 /* GameConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GameConstants.h; path = SpaceInvaders/GameConstants.h; sourceTree = SOURCE_ROOT; };
+		03A68E321F5A605400CA3CF8 /* GameController.h */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.c.h; name = GameController.h; path = SpaceInvaders/GameController.h; sourceTree = SOURCE_ROOT; tabWidth = 2; };
+		03A68E331F5A605400CA3CF8 /* GameWorld.h */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.c.h; name = GameWorld.h; path = SpaceInvaders/GameWorld.h; sourceTree = SOURCE_ROOT; tabWidth = 2; };
+		03A68E341F5A605400CA3CF8 /* GraphObject.h */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.c.h; name = GraphObject.h; path = SpaceInvaders/GraphObject.h; sourceTree = SOURCE_ROOT; tabWidth = 2; };
+		03A68E351F5A605400CA3CF8 /* SoundFX.h */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.c.h; name = SoundFX.h; path = SpaceInvaders/SoundFX.h; sourceTree = SOURCE_ROOT; tabWidth = 2; };
+		03A68E361F5A605400CA3CF8 /* SpriteManager.h */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.c.h; name = SpriteManager.h; path = SpaceInvaders/SpriteManager.h; sourceTree = SOURCE_ROOT; tabWidth = 2; };
+		03A68E371F5A605400CA3CF8 /* StudentWorld.h */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.c.h; name = StudentWorld.h; path = SpaceInvaders/StudentWorld.h; sourceTree = SOURCE_ROOT; tabWidth = 2; };
+		4B5BB2611A9110AA009A9A96 /* SpaceInvaders */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = SpaceInvaders; sourceTree = BUILT_PRODUCTS_DIR; };
+		4B5BB27F1A911630009A9A96 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		4B5BB25E1A9110AA009A9A96 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4B5BB2801A911630009A9A96 /* OpenGL.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		03FEEF331F4E005100A02098 /* Header Files */ = {
+			isa = PBXGroup;
+			children = (
+				03A68E2D1F5A605400CA3CF8 /* Actor.h */,
+				03A68E2E1F5A605400CA3CF8 /* freeglut_ext.h */,
+				03A68E2F1F5A605400CA3CF8 /* freeglut_std.h */,
+				03A68E301F5A605400CA3CF8 /* freeglut.h */,
+				03A68E311F5A605400CA3CF8 /* GameConstants.h */,
+				03A68E321F5A605400CA3CF8 /* GameController.h */,
+				03A68E331F5A605400CA3CF8 /* GameWorld.h */,
+				03A68E341F5A605400CA3CF8 /* GraphObject.h */,
+				03A68E351F5A605400CA3CF8 /* SoundFX.h */,
+				03A68E361F5A605400CA3CF8 /* SpriteManager.h */,
+				03A68E371F5A605400CA3CF8 /* StudentWorld.h */,
+			);
+			name = "Header Files";
+			sourceTree = "<group>";
+		};
+		03FEEF341F4E005700A02098 /* Source Files */ = {
+			isa = PBXGroup;
+			children = (
+				03A68E231F5A603D00CA3CF8 /* Actor.cpp */,
+				03A68E241F5A603D00CA3CF8 /* GameController.cpp */,
+				03A68E251F5A603D00CA3CF8 /* GameWorld.cpp */,
+				03A68E261F5A603D00CA3CF8 /* main.cpp */,
+				03A68E271F5A603D00CA3CF8 /* StudentWorld.cpp */,
+			);
+			name = "Source Files";
+			sourceTree = "<group>";
+		};
+		4B5BB2581A9110AA009A9A96 = {
+			isa = PBXGroup;
+			children = (
+				4B5BB27F1A911630009A9A96 /* OpenGL.framework */,
+				4B5BB2631A9110AA009A9A96 /* SpaceInvaders */,
+				4B5BB2621A9110AA009A9A96 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		4B5BB2621A9110AA009A9A96 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				4B5BB2611A9110AA009A9A96 /* SpaceInvaders */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		4B5BB2631A9110AA009A9A96 /* SpaceInvaders */ = {
+			isa = PBXGroup;
+			children = (
+				03FEEF341F4E005700A02098 /* Source Files */,
+				03FEEF331F4E005100A02098 /* Header Files */,
+			);
+			name = SpaceInvaders;
+			path = FrackMan;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		4B5BB2601A9110AA009A9A96 /* SpaceInvaders */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4B5BB2681A9110AA009A9A96 /* Build configuration list for PBXNativeTarget "SpaceInvaders" */;
+			buildPhases = (
+				4B5BB25D1A9110AA009A9A96 /* Sources */,
+				4B5BB25E1A9110AA009A9A96 /* Frameworks */,
+				4B5BB25F1A9110AA009A9A96 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SpaceInvaders;
+			productName = FrackMan;
+			productReference = 4B5BB2611A9110AA009A9A96 /* SpaceInvaders */;
+			productType = "com.apple.product-type.tool";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		4B5BB2591A9110AA009A9A96 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0720;
+				ORGANIZATIONNAME = "David Smallberg";
+				TargetAttributes = {
+					4B5BB2601A9110AA009A9A96 = {
+						CreatedOnToolsVersion = 6.1.1;
+					};
+				};
+			};
+			buildConfigurationList = 4B5BB25C1A9110AA009A9A96 /* Build configuration list for PBXProject "SpaceInvaders" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 4B5BB2581A9110AA009A9A96;
+			productRefGroup = 4B5BB2621A9110AA009A9A96 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				4B5BB2601A9110AA009A9A96 /* SpaceInvaders */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		4B5BB25D1A9110AA009A9A96 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				03A68E2A1F5A603D00CA3CF8 /* GameWorld.cpp in Sources */,
+				03A68E2B1F5A603D00CA3CF8 /* main.cpp in Sources */,
+				03A68E291F5A603D00CA3CF8 /* GameController.cpp in Sources */,
+				03A68E2C1F5A603D00CA3CF8 /* StudentWorld.cpp in Sources */,
+				03A68E281F5A603D00CA3CF8 /* Actor.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		4B5BB2661A9110AA009A9A96 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				"LIBRARY_SEARCH_PATHS[arch=*]" = /opt/local/lib;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				"OTHER_LDFLAGS[arch=*]" = "-lglut";
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		4B5BB2671A9110AA009A9A96 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		4B5BB2691A9110AA009A9A96 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
+				GCC_WARN_PEDANTIC = NO;
+				"LIBRARY_SEARCH_PATHS[arch=*]" = (
+					/opt/X11/lib,
+					/opt/local/lib,
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				OTHER_CFLAGS = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		4B5BB26A1A9110AA009A9A96 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
+				GCC_WARN_PEDANTIC = NO;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		4B5BB25C1A9110AA009A9A96 /* Build configuration list for PBXProject "SpaceInvaders" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4B5BB2661A9110AA009A9A96 /* Debug */,
+				4B5BB2671A9110AA009A9A96 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4B5BB2681A9110AA009A9A96 /* Build configuration list for PBXNativeTarget "SpaceInvaders" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4B5BB2691A9110AA009A9A96 /* Debug */,
+				4B5BB26A1A9110AA009A9A96 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 4B5BB2591A9110AA009A9A96 /* Project object */;
+}
