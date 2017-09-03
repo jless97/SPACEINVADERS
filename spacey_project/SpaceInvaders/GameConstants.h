@@ -54,7 +54,7 @@ const int KEY_PRESS_z     = 'z';
 ///////////----------- BOARD AND SPRITE DIMENSIONS--------------///////////
 ///////////////////////////////////////////////////////////////////////////
 
-const int BORDER_HEIGHT = 9;
+const int BORDER_HEIGHT = 5;
 const int VIEW_WIDTH = 64; //256;
 const int VIEW_HEIGHT = 64;	 //256;
 

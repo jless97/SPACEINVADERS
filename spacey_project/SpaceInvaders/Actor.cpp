@@ -51,6 +51,30 @@ void Border::do_something(void) {}
 Border::~Border() {}
 
 ///////////////////////////////////////////////////////////////////////////
+////////////////-----------INVADER EXPLOSION--------------/////////////////
+///////////////////////////////////////////////////////////////////////////
+
+InvaderExplosion::InvaderExplosion(StudentWorld* world, int start_x, int start_y, int image_id)
+: Actor(world, image_id, start_x, start_y, Direction::right, 1.0, 0), m_display(0) { world->add_actor(this); }
+
+void InvaderExplosion::do_something(void)
+{
+  if (m_display == 6) { set_dead(); return; }
+  m_display++;
+}
+
+InvaderExplosion::~InvaderExplosion() {}
+
+///////////////////////////////////////////////////////////////////////////
+/////////////////-----------PLAYER EXPLOSION--------------/////////////////
+///////////////////////////////////////////////////////////////////////////
+
+PlayerExplosion::PlayerExplosion(StudentWorld* world, int start_x, int start_y)
+: InvaderExplosion(world, start_x, start_y, IID_PLAYER_KILLED) {}
+
+PlayerExplosion::~PlayerExplosion() {}
+
+///////////////////////////////////////////////////////////////////////////
 /////////////////////-----------SPACESHIP--------------////////////////////
 ///////////////////////////////////////////////////////////////////////////
 
@@ -167,12 +191,12 @@ void LargeInvader::do_something(void)
         // Fast laser
         if (rand() % 10 == 1)
         {
-          new SlowLaser(invader_world, x, y - 1, Laser::LaserClass::fast_laser);
+          new FastLaser(invader_world, x, y - 1, Laser::LaserClass::fast_laser);
         }
         // Medium laser
         else
         {
-          new SlowLaser(invader_world, x, y - 1, Laser::LaserClass::medium_laser);
+          new MediumLaser(invader_world, x, y - 1, Laser::LaserClass::medium_laser);
         }
       }
       // Slow laser
@@ -218,21 +242,6 @@ SmallInvader::SmallInvader(StudentWorld* world, int start_x, int start_y)
 : LargeInvader(world, start_x, start_y, IID_SMALL_INVADER, 0.8) {}
 
 SmallInvader::~SmallInvader() {}
-
-///////////////////////////////////////////////////////////////////////////
-////////////////-----------INVADER EXPLOSION--------------/////////////////
-///////////////////////////////////////////////////////////////////////////
-
-InvaderExplosion::InvaderExplosion(StudentWorld* world, int start_x, int start_y)
-: Actor(world, IID_INVADER_KILLED, start_x, start_y, Direction::right, 1.0, 0), m_display(0) { world->add_actor(this); }
-
-void InvaderExplosion::do_something(void)
-{
-  if (m_display == 6) { set_dead(); return; }
-  m_display++;
-}
-
-InvaderExplosion::~InvaderExplosion() {}
 
 ///////////////////////////////////////////////////////////////////////////
 ///////////////////-----------FLYINGSAUCER--------------///////////////////
@@ -302,7 +311,7 @@ void Laser::do_something(void)
     case LaserClass::medium_laser:
       laser_world->check_collision(this, false, true); // Check if the laser hit the player spaceship (or barrier)
       if (!is_alive()) { return; } // Check the current status of the laser
-      move_to(x, y - 2); // If no collision, then update position
+      move_to(x, y - 1); // If no collision, then update position
       if (y <= BORDER_HEIGHT) { set_dead(); }
       if (!is_alive()) { return; } // Check the current status of the laser
       laser_world->check_collision(this, false, true); // Check if the laser hit the player spaceship (or barrier)
@@ -311,7 +320,7 @@ void Laser::do_something(void)
     case LaserClass::fast_laser:
       laser_world->check_collision(this, false, true); // Check if the laser hit the player spaceship (or barrier)
       if (!is_alive()) { return; } // Check the current status of the laser
-      move_to(x, y - 3); // If no collision, then update position
+      move_to(x, y - 2); // If no collision, then update position
       if (y <= BORDER_HEIGHT) { set_dead(); }
       if (!is_alive()) { return; } // Check the current status of the laser
       laser_world->check_collision(this, false, true); // Check if the laser hit the player spaceship (or barrier)
@@ -355,7 +364,7 @@ MediumLaser::~MediumLaser() {}
 ///////////////////////////////////////////////////////////////////////////
 
 FastLaser::FastLaser(StudentWorld* world, int start_x, int start_y, Laser::LaserClass laser_class)
-: Laser(world, start_x, start_y, laser_class, IID_MEDIUM_LASER, Direction::left) { set_laser_speed(LaserClass::fast_laser); }
+: Laser(world, start_x, start_y, laser_class, IID_FAST_LASER, Direction::left) { set_laser_speed(LaserClass::fast_laser); }
 
 FastLaser::~FastLaser() {}
 

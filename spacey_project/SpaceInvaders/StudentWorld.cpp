@@ -318,16 +318,18 @@ void StudentWorld::check_collision(Actor* actor, bool is_player, bool is_invader
   if (is_invader)
   {
     // Invader projectile hit player spaceship
-    if (actor->get_x() >= m_spaceship->get_x() - 2 && actor->get_x() <= m_spaceship->get_x() + 2 && actor->get_y() == m_spaceship->get_y())
+    if (actor->get_x() >= m_spaceship->get_x() - 2 && actor->get_x() <= m_spaceship->get_x() + 2 &&
+        actor->get_y() + 2 >= m_spaceship->get_y() && actor->get_y() - 2 <= m_spaceship->get_y())
     {
       m_spaceship->set_dead();
+      new PlayerExplosion(this, actor->get_x(), actor->get_y());
       play_sound(SOUND_PLAYER_KILLED);
     }
     // Invader projectile hit the bottom border
     if (actor->get_y() == BORDER_HEIGHT)
     {
       play_sound(SOUND_PLAYER_KILLED);
-      new InvaderExplosion(this, actor->get_x(), actor->get_y());
+      new PlayerExplosion(this, actor->get_x(), actor->get_y() + 1);
     }
   }
 }
@@ -365,7 +367,7 @@ void StudentWorld::init_border(void)
   {
     for (int j = 0; j < 1; j++)
     {
-      m_border[i][j] = new Border(this, i, j + 8);
+      m_border[i][j] = new Border(this, i, j + 5);
     }
   }
 }
