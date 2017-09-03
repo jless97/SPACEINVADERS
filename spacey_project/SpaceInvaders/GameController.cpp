@@ -111,13 +111,11 @@ void GameController::init_drawers_and_sounds(void)
 //    { IID_ALIEN_KILLED,     0, "invaderkilled.tga" },
 
 		{ IID_PLAYER		   , 0, "frack1.tga"},
+    { IID_PLAYER, 1, "frack2.tga"},
 		{ IID_PROTESTER, 0, "protester1.tga"},
 		{ IID_PROTESTER, 1, "protester2.tga" },
-		{ IID_PROTESTER, 2, "protester3.tga" },
 		{ IID_HARD_CORE_PROTESTER, 0, "hardcore1.tga" },
 		{ IID_HARD_CORE_PROTESTER, 1, "hardcore2.tga" },
-		{ IID_HARD_CORE_PROTESTER, 2, "hardcore3.tga" },
-		{ IID_HARD_CORE_PROTESTER, 3, "hardcore4.tga" },
 		{ IID_WATER_SPURT, 0, "water1.tga" },
 		{ IID_WATER_SPURT, 1, "water2.tga" },
 		{ IID_WATER_SPURT, 2, "water3.tga" },
@@ -133,6 +131,8 @@ void GameController::init_drawers_and_sounds(void)
   };
 
 	SoundMapType::value_type sounds[] = {
+    make_pair(SOUND_DIG, "digging.wav"),
+    
 		make_pair(SOUND_THEME					, "theme.wav"),
     make_pair(SOUND_ALIEN_MOVE_1,   "fastinvader1.wav"),
     make_pair(SOUND_ALIEN_MOVE_2,   "fastinvader2.wav"),
@@ -311,7 +311,7 @@ void GameController::do_something()
 		case not_applicable:
 			break;
 		case welcome:
-			play_sound(SOUND_THEME);
+			//play_sound(SOUND_THEME);
 			m_main_message = "Space Invaders";
 			m_second_message = "Press Enter to begin play...";
 			set_game_state(prompt);

@@ -25,7 +25,7 @@ using namespace std;
 ///////////////////////////////////////////////////////////////////////////
 
 GameWorld::GameWorld(std::string asset_dir)
-: m_lives(START_PLAYER_LIVES), m_score(0), m_level(0), m_controller(nullptr), m_asset_dir(asset_dir) {}
+: m_lives(START_PLAYER_LIVES), m_score(0), m_level(1), m_controller(nullptr), m_asset_dir(asset_dir) {}
 
 void GameWorld::set_game_stat_text(string text) { m_controller->set_game_stat_text(text); }
 

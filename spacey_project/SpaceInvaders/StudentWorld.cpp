@@ -34,7 +34,7 @@ GameWorld* createStudentWorld(string asset_dir) { return new StudentWorld(asset_
 ///////////////////////////////////////////////////////////////////////////
 
 StudentWorld::StudentWorld(std::string asset_dir)
-:GameWorld(asset_dir), m_spaceship_laser_count(false), m_alien_laser_count(0) {}
+:GameWorld(asset_dir), m_spaceship_laser_count(false), m_invader_laser_count(0), m_current_invader_count(55) {}
 
 StudentWorld::~StudentWorld() { clean_up(); }
 
@@ -44,45 +44,87 @@ StudentWorld::~StudentWorld() { clean_up(); }
 
 int StudentWorld::init()
 {
-  // Initialize frackman player
-  m_spaceship = new Spaceship(this);
-
-  // Add initial actors to the current level (i.e. the aliens and barriers)
-  add_initial_actors();
-
+  m_spaceship = new Spaceship(this); // Initialize player spaceship
+  
+  add_initial_actors(); // Add initial actors to the current level (i.e. the invaders and barriers)
+  
+  set_spaceship_laser_count(); // Set the current player laser count in the space field to 0
+  
+  set_invader_laser_count(); // Set the current invaders' laser count in the space field to 0
+  
+  set_current_invader_count(); // Resets the number of invaders to destroy per round to 55
+  
   return GWSTATUS_CONTINUE_GAME;
 }
 
 int StudentWorld::move()
 {
-  // Update scoreboard
-  update_scoreboard();
+  update_scoreboard(); // Update scoreboard
   
-  // Give the player a chance to do something
-  m_spaceship->do_something();
+  m_spaceship->do_something(); // Give the player a chance to do something
   
   // Give all other actors a chance to do something
-  for (int i = 0; i < m_actors.size(); i++) { m_actors[i]->do_something(); }
-  
-  // Remove newly-dead actors after each tick
-  for (vector<Actor*>::iterator it = m_actors.begin(); it != m_actors.end(); )
+  for (int i = 0; i < m_actors.size(); i++)
   {
-    if (!(*it)->is_alive()) { delete *it; it = m_actors.erase(it); }
-    else { it++; }
+    m_actors[i]->do_something();
   }
   
-  // If frackman died during this tick, decrement lives, and if out of lives (GameWorld goes to game over screen)
+  // After letting all actors make a move, check to see if invaders should move down on the next turn
+  static int counter = 0;
+  bool move_down = false;
+  if (counter > 100)
+  {
+    for (int i = 0; i < m_actors.size(); i++)
+    {
+      if (m_actors[i]->get_id() == IID_PROTESTER || m_actors[i]->get_id() == IID_HARD_CORE_PROTESTER || m_actors[i]->get_id() == IID_GOLD)
+      {
+        if (m_actors[i]->get_x() == 0 || m_actors[i]->get_x() == VIEW_WIDTH - 1)
+        {
+          move_down = true;
+          counter = 0;
+        }
+      }
+    }
+  }
+  else { counter++; }
+  // If invaders should move down, set their current direction to move as down, and their next direction to be in the opposite horizontal direction
+  if (move_down)
+  {
+    move_down = false;
+    for (int i = 0; i < m_actors.size(); i++)
+    {
+      if (dynamic_cast<LargeInvader*>(m_actors[i])->get_movement_direction() == 0) {
+        dynamic_cast<LargeInvader*>(m_actors[i])->set_next_movement_direction(1);
+      }
+      else
+      {
+        dynamic_cast<LargeInvader*>(m_actors[i])->set_next_movement_direction(0);
+      }
+      dynamic_cast<LargeInvader*>(m_actors[i])->set_movement_direction(2);
+    }
+  }
+  
+  // If the player died during this tick, decrement lives, and if out of lives (GameWorld goes to game over screen)
   if (!m_spaceship->is_alive())
   {
     dec_lives();
     return GWSTATUS_PLAYER_DIED;
   }
   
-  // Add additional actors (i.e. flying saucer)
-  add_additional_actors();
+  // If the player destroyed all 55 aliens in a round, then advance to the next round
+  if (get_current_invader_count() <= 0) { return GWSTATUS_FINISHED_LEVEL; }
   
-  // Continue with the level until one of the above conditions happens
-  return GWSTATUS_CONTINUE_GAME;
+  add_additional_actors(); // Add additional actors (i.e. flying saucer)
+  
+  // Remove newly-dead actors after each tick
+  for (vector<Actor*>::iterator it = m_actors.begin(); it != m_actors.end(); )
+  {
+    //if ((*it)->get_id() == IID_PROTESTER) { continue; }
+    if (!(*it)->is_alive()) { delete *it; it = m_actors.erase(it); }
+    else { it++; }
+  }
+  
+  return GWSTATUS_CONTINUE_GAME; // Continue with the level until one of the above conditions happens
 }
 
 void StudentWorld::clean_up()
@@ -94,10 +136,7 @@ void StudentWorld::clean_up()
     it = m_actors.erase(it);
   }
   
-  // Remove player spaceship
-  delete m_spaceship;
-  
-  return;
+  delete m_spaceship; // Remove player spaceship
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -108,8 +147,38 @@ void StudentWorld::add_actor(Actor* actor) { m_actors.push_back(actor); }
 
 void StudentWorld::add_initial_actors(void)
 {
-  /// TODO: add aliens and barriers
-  return;
+  /// TODO: add barriers
+  
+  /// TODO: the rows of aliens start lower and lower as the rounds go on (and it resets at round 10 to original height)
+  // Adding Space Invaders
+    // Add Large Invaders
+  int j = 0;
+  for (int i = 5; (j++ < 11); i += 5)
+  {
+    new LargeInvader(this, i, 44);
+  }
+  j = 0;
+  for (int i = 5; (j++ < 11); i += 5)
+  {
+    new LargeInvader(this, i, 48);
+  }
+    // Add Medium Invaders
+  j = 0;
+  for (int i = 5; (j++ < 11); i += 5)
+  {
+    new MediumInvader(this, i, 52);
+  }
+  j = 0;
+  for (int i = 5; (j++ < 11); i += 5)
+  {
+    new MediumInvader(this, i, 56);
+  }
+    // Add Small Invaders
+  j = 0;
+  for (int i = 5; (j++ < 11); i += 5)
+  {
+    new SmallInvader(this, i, 60);
+  }
 }
 
 void StudentWorld::add_additional_actors(void)
@@ -144,7 +213,15 @@ void StudentWorld::update_scoreboard()
 
 void StudentWorld::update_spaceship_laser_count(bool how_much) { m_spaceship_laser_count = how_much; }
 
-void StudentWorld::update_alien_laser_count(int how_much) { m_alien_laser_count += how_much; }
+void StudentWorld::update_invader_laser_count(int how_much) { m_invader_laser_count += how_much; }
+
+void StudentWorld::update_current_invader_count(int how_much) { m_current_invader_count += how_much; }
+
+void StudentWorld::set_spaceship_laser_count(void) { m_spaceship_laser_count = false; }
+
+void StudentWorld::set_invader_laser_count(void) { m_invader_laser_count = 0; }
+
+void StudentWorld::set_current_invader_count(void) { m_current_invader_count = 55; }
 
 ///////////////////////////////////////////////////////////////////////////
 /////////////////-----------ACCESSOR FUNCTIONS-------------////////////////
@@ -152,37 +229,58 @@ void StudentWorld::update_alien_laser_count(int how_much) { m_alien_laser_count 
 
 bool StudentWorld::get_spaceship_laser_count(void) const { return m_spaceship_laser_count; }
 
-int StudentWorld::get_alien_laser_count(void) const { return m_alien_laser_count; }
+int StudentWorld::get_invader_laser_count(void) const { return m_invader_laser_count; }
+
+int StudentWorld::get_current_invader_count(void) const { return m_current_invader_count; }
 
 ///////////////////////////////////////////////////////////////////////////
 ////////////-----------COLLISION-HANDLING FUNCTION-------------////////////
 ///////////////////////////////////////////////////////////////////////////
 
-void StudentWorld::check_collision(Actor* actor, bool is_player, bool is_alien) {
+void StudentWorld::check_collision(Actor* actor, bool is_player, bool is_invader) {
   for (int i = 0; i < m_actors.size(); i++)
   {
     if (!m_actors[i]->is_alive()) { continue; } // To avoid doubling of one of the effects below (temporary fix)
-    // Check if player spaceship's laser hit any aliens (or flying saucer)
+    // Check if player spaceship's laser hit any invaders (or flying saucer)
     if (is_player)
     {
-      if (m_actors[i]->get_id() == IID_PROTESTER || m_actors[i]->get_id() == IID_HARD_CORE_PROTESTER || m_actors[i]->get_id() == IID_GOLD)
+      // If laser hit the large invader
+      if (m_actors[i]->get_id() == IID_PROTESTER)
       {
-        // Player projectile hit an alien spaceship
-        if (actor->get_x() == m_actors[i]->get_x() && actor->get_y() == m_actors[i]->get_y())
+        if (actor->get_x() >= m_actors[i]->get_x() - 2 && actor->get_x() <= m_actors[i]->get_x() + 2 && actor->get_y() == m_actors[i]->get_y())
         {
-          /// TODO: have three four different scores (depending on the type of invader (or flying saucer)
-          if (m_actors[i]->get_id() == IID_PROTESTER) { increase_score(10); }
-          else if (m_actors[i]->get_id() == IID_HARD_CORE_PROTESTER) { increase_score(20); }
-          else if (m_actors[i]->get_id() == IID_BOULDER) { increase_score(30); }
-          else if (m_actors[i]->get_id() == IID_GOLD) { increase_score(100); } /// TODO: Flying Saucer has different points
           actor->set_dead();
+          m_actors[i]->set_dead();
           play_sound(SOUND_ALIEN_KILLED);
+          increase_score(10);
+        }
+      }
+      // If laser hit the medium invader
+      if (m_actors[i]->get_id() == IID_HARD_CORE_PROTESTER)
+      {
+        if (actor->get_x() >= m_actors[i]->get_x() - 1.5 && actor->get_x() <= m_actors[i]->get_x() + 1.5 && actor->get_y() == m_actors[i]->get_y())
+        {
+          actor->set_dead();
+          m_actors[i]->set_dead();
+          play_sound(SOUND_ALIEN_KILLED);
+          increase_score(20);
+        }
+      }
+      // If laser hit the small invader
+      if (m_actors[i]->get_id() == IID_GOLD)
+      {
+        if (actor->get_x() >= m_actors[i]->get_x() - 1 && actor->get_x() <= m_actors[i]->get_x() + 1 && actor->get_y() == m_actors[i]->get_y())
+        {
+          actor->set_dead();
+          m_actors[i]->set_dead();
+          play_sound(SOUND_ALIEN_KILLED);
+          increase_score(30);
         }
       }
     }
   }
-  // Check if alien laser hits the player spaceship /// TODO: barrier too
-  if (is_alien)
+  // Check if invader laser hits the player spaceship /// TODO: barrier too
+  if (is_invader)
   {
     // Alien projectile hit player spaceship
     if (actor->get_x() == m_spaceship->get_x() && actor->get_y() == m_spaceship->get_y())
@@ -192,6 +290,11 @@ void StudentWorld::check_collision(Actor* actor, bool is_player, bool is_alien) 
     }
   }
 }
+
+///////////////////////////////////////////////////////////////////////////
+/////////////-----------INVADER-MOVEMENT FUNCTION-------------/////////////
+///////////////////////////////////////////////////////////////////////////
+
 
 ///////////////////////////////////////////////////////////////////////////
 /////////////-----------MATH/MATH HELPER FUNCTIONS-------------////////////

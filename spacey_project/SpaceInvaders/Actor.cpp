@@ -43,7 +43,7 @@ Actor::~Actor() { set_visible(false); }
 ///////////////////////////////////////////////////////////////////////////
 
 Spaceship::Spaceship(StudentWorld* world, int start_x, int start_y, int image_id, double image_size)
-: Actor(world, image_id, start_x, start_y, Direction::up, image_size, 0) {}
+: Actor(world, image_id, start_x, start_y, Direction::right, image_size, 0) {}
 
 void Spaceship::do_something(void)
 {
@@ -84,23 +84,85 @@ Spaceship::~Spaceship() {}
 //////////////////-----------LARGE INVADER--------------///////////////////
 ///////////////////////////////////////////////////////////////////////////
 
-LargeInvader::LargeInvader(StudentWorld* world, int start_x, int start_y, int image_id, double image_size)
-: Spaceship(world, start_x, start_y, IID_BOULDER, 1.0) { world->add_actor(this); }
+LargeInvader::LargeInvader(StudentWorld* world, int start_x, int start_y, int image_id, double image_size, int dir)
+: Spaceship(world, start_x, start_y, image_id, image_size), m_direction(dir), m_next_direction(0), m_can_move(0) { world->add_actor(this); }
 
 void LargeInvader::do_something(void)
 {
+//  static int play_sound = 0;
+//  static int can_play = 0;
   
+  if (!is_alive()) { return; } // Check the current status of the invader object
   
+  if (get_can_move_status() < 20) { update_can_move_status(1); return; }
+  else { set_can_move_status(0); }
+
+//  if (can_play < 3)
+//  {
+//    can_play++;
+//  }
+//  else
+//  {
+//    can_play = 0;
+//    switch (play_sound)
+//    {
+//      case 0: invader_world->play_sound(SOUND_ALIEN_MOVE_1); play_sound = 1; break;
+//      case 1: invader_world->play_sound(SOUND_ALIEN_MOVE_2); play_sound = 2; break;
+//      case 2: invader_world->play_sound(SOUND_ALIEN_MOVE_3); play_sound = 3; break;
+//      case 3: invader_world->play_sound(SOUND_ALIEN_MOVE_4); play_sound = 0; break;
+//      default:
+//        break;
+//    }
+//  }
+
+  int x = get_x(), y = get_y(); // Get the current coordinates of the invader object
+  
+  if (!is_alive()) { return; } // Check the current status of the invader object
+  
+  switch (get_movement_direction())
+  {
+    case 0:
+      if (!is_alive()) { return; } // Check the current status of the invader object
+      if (x > 0) { move_to(x - 1, y); }
+      if (!is_alive()) { return; } // Check the current status of the invader object
+      break;
+    case 1:
+      if (!is_alive()) { return; } // Check the current status of the invader object
+      if (x < VIEW_WIDTH - 1) { move_to(x + 1, y); }
+      if (!is_alive()) { return; } // Check the current status of the invader object
+      break;
+    case 2:
+      if (!is_alive()) { return; } // Check the current status of the invader object
+      move_to(x, y - 2);
+      if (!is_alive()) { return; } // Check the current status of the invader object
+      set_movement_direction(get_next_movement_direction());
+    default:
+      break;
+  }
 }
 
-LargeInvader::~LargeInvader() {}
+void LargeInvader::update_can_move_status(int how_much) { m_can_move += how_much; }
+  
+void LargeInvader::set_movement_direction(int dir) { if (this == nullptr) { return; } m_direction = dir; }
+
+void LargeInvader::set_next_movement_direction(int dir) { if (this == nullptr) { return; } m_next_direction = dir; }
+
+void LargeInvader::set_can_move_status(int value) { m_can_move = value; }
+
+int LargeInvader::get_movement_direction(void) { if (this == nullptr) { return -1; } return m_direction; }
+
+int LargeInvader::get_next_movement_direction(void) { return m_next_direction; }
+
+int LargeInvader::get_can_move_status(void) const { return m_can_move; }
+
+LargeInvader::~LargeInvader() { world()->update_current_invader_count(-1); }
         
 ///////////////////////////////////////////////////////////////////////////
 //////////////////-----------MEDIUM INVADER--------------//////////////////
 ///////////////////////////////////////////////////////////////////////////
 
 MediumInvader::MediumInvader(StudentWorld* world, int start_x, int start_y)
-: LargeInvader(world, start_x, start_y, IID_BARREL, 1.0) { world->add_actor(this); }
+: LargeInvader(world, start_x, start_y, IID_HARD_CORE_PROTESTER, 0.75) {}
 
 MediumInvader::~MediumInvader() {}
 
@@ -109,13 +171,18 @@ MediumInvader::~MediumInvader() {}
 ///////////////////////////////////////////////////////////////////////////
 
 SmallInvader::SmallInvader(StudentWorld* world, int start_x, int start_y)
-: LargeInvader(world, start_x, start_y, IID_PROTESTER, 1.0) { world->add_actor(this); }
+: LargeInvader(world, start_x, start_y, IID_PLAYER, 0.5) {}
 
 SmallInvader::~SmallInvader() {}
 
 ///////////////////////////////////////////////////////////////////////////
 ///////////////////-----------FLYINGSAUCER--------------///////////////////
 ///////////////////////////////////////////////////////////////////////////
+
+FlyingSaucer::FlyingSaucer(StudentWorld* world, int start_x, int start_y)
+: Actor(world, IID_GOLD, start_x, start_y, Direction::up, 1.0, 0) { world->add_actor(this); }
+
+FlyingSaucer::~FlyingSaucer() {}
 
 ///////////////////////////////////////////////////////////////////////////
 //////////////////////-----------BARRIER--------------/////////////////////
@@ -130,8 +197,8 @@ Laser::Laser(StudentWorld* world, int start_x, int start_y, Laser::LaserClass la
 {
   world->add_actor(this);
   world->play_sound(SOUND_LASER);
-  if (get_projectile_viewpoint()) { world->update_spaceship_laser_count(true); }
-  else { world->update_alien_laser_count(1); }
+  if (get_projectile_viewpoint() == LaserClass::player_laser) { world->update_spaceship_laser_count(true); }
+  else { world->update_invader_laser_count(1); }
 }
 
 void Laser::do_something(void)
@@ -192,7 +259,7 @@ void Laser::set_laser_speed(Laser::LaserClass value) { m_spaceship_laser = value
 Laser::~Laser()
 {
   if (get_projectile_viewpoint() == LaserClass::player_laser) { world()->update_spaceship_laser_count(false); }
-  else { world()->update_alien_laser_count(-1); }
+  else { world()->update_invader_laser_count(-1); }
 }
 
 ///////////////////////////////////////////////////////////////////////////

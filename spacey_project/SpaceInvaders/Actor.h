@@ -51,7 +51,7 @@ private:
 class Spaceship : public Actor
 {
 public:
-  Spaceship(StudentWorld* world, int start_x=30, int start_y=5, int image_id=IID_PLAYER, double image_size=1.0);
+  Spaceship(StudentWorld* world, int start_x=30, int start_y=12, int image_id=IID_PLAYER, double image_size=1.0);
   virtual void do_something(void);
   virtual ~Spaceship();
   
@@ -62,23 +62,34 @@ private:
 //////////////////-----------LARGE INVADER--------------///////////////////
 ///////////////////////////////////////////////////////////////////////////
 
-// IID_BOULDER
+// IID_PROTESTER
 class LargeInvader : public Spaceship
 {
 public:
-  LargeInvader(StudentWorld* world, int start_x, int start_y, int image_id=IID_BOULDER, double image_size=1.0);
+  LargeInvader(StudentWorld* world, int start_x, int start_y, int image_id=IID_PROTESTER, double image_size=1.0, int dir=1);
   virtual void do_something(void);
+  /* Mutator Functions */
+  void update_can_move_status(int how_much);      // Updates the status of when the invaders can move again
+  void set_movement_direction(int dir);           // Update the current direction the invaders are moving in
+  void set_next_movement_direction(int dir);      // Update the next direction to move in (used after moving down)
+  void set_can_move_status(int value);            // Sets the status of whether the invaders can move this tick
+  /* Accessor Functions */
+  int get_movement_direction(void);               // Returns the current direction that the invaders are moving in
+  int get_next_movement_direction(void);          // Returns the next direction that the invader will take (used after moving down)
+  int get_can_move_status(void) const;            // Returns the status of when the invaders get to move
   virtual ~LargeInvader();
   
 private:
-
+  int       m_direction;      // 0: left, 1: right, 2: down
+  int       m_next_direction;
+  int       m_can_move;
 };
 
 ///////////////////////////////////////////////////////////////////////////
 //////////////////-----------MEDIUM INVADER--------------//////////////////
 ///////////////////////////////////////////////////////////////////////////
 
-// IID_BARREL
+// IID_HARDCORE_PROTESTER
 class MediumInvader : public LargeInvader
 {
 public:
@@ -92,7 +103,7 @@ private:
 ///////////////////-----------SMALL INVADER--------------//////////////////
 ///////////////////////////////////////////////////////////////////////////
 
-// IID_PROTESTER
+// IID_PLAYER
 class SmallInvader : public LargeInvader
 {
 public:
@@ -105,7 +116,7 @@ public:
 ///////////////////////////////////////////////////////////////////////////
 
 // IID_GOLD
-class FlyingSaucer : public LargeInvader
+class FlyingSaucer : public Actor
 {
 public:
   FlyingSaucer(StudentWorld* world, int start_x, int start_y);
