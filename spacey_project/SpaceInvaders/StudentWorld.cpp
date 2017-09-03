@@ -283,7 +283,7 @@ void StudentWorld::check_collision(Actor* actor, bool is_player, bool is_invader
   if (is_invader)
   {
     // Alien projectile hit player spaceship
-    if (actor->get_x() == m_spaceship->get_x() && actor->get_y() == m_spaceship->get_y())
+    if (actor->get_x() >= m_spaceship->get_x() - 2 && actor->get_x() <= m_spaceship->get_x() + 2 && actor->get_y() == m_spaceship->get_y())
     {
       m_spaceship->set_dead();
       play_sound(SOUND_PLAYER_KILLED);
