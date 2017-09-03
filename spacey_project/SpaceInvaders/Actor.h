@@ -97,7 +97,7 @@ private:
 class Spaceship : public Actor
 {
 public:
-  Spaceship(StudentWorld* world, int start_x=30, int start_y=12, int image_id=IID_SPACESHIP, double image_size=1.0);
+  Spaceship(StudentWorld* world, int start_x=30, int start_y=4, int image_id=IID_SPACESHIP, double image_size=1.0);
   virtual void do_something(void);
   virtual ~Spaceship();
   
@@ -112,23 +112,26 @@ private:
 class LargeInvader : public Spaceship
 {
 public:
-  LargeInvader(StudentWorld* world, int start_x, int start_y, int image_id=IID_LARGE_INVADER, double image_size=1.0, int dir=1);
+  LargeInvader(StudentWorld* world, int start_x, int start_y, int row, int image_id=IID_LARGE_INVADER, double image_size=1.0, int dir=1);
   virtual void do_something(void);
   /* Mutator Functions */
   void update_can_move_status(int how_much);      // Updates the status of when the invaders can move again
   void set_movement_direction(int dir);           // Update the current direction the invaders are moving in
   void set_next_movement_direction(int dir);      // Update the next direction to move in (used after moving down)
   void set_can_move_status(int value);            // Sets the status of whether the invaders can move this tick
+  void set_row_number(int value);                 // Sets the row number that the invader belongs to
   /* Accessor Functions */
   int get_movement_direction(void);               // Returns the current direction that the invaders are moving in
   int get_next_movement_direction(void);          // Returns the next direction that the invader will take (used after moving down)
-  int get_can_move_status(void) const;            // Returns the status of when the invaders get to move
+  int get_can_move_status(void);                  // Returns the status of when the invaders get to move
+  int get_row_number(void);                       // Returns the row number that the invader belongs to
   virtual ~LargeInvader();
   
 private:
-  int       m_direction;      // 0: left, 1: right, 2: down
-  int       m_next_direction;
-  int       m_can_move;
+  int       m_direction;      // Direction the invaders are moving in (0: left, 1: right, 2: down)
+  int       m_next_direction; // Variable that handles when the invaders will move down a row
+  int       m_can_move;       // To deal with the movement speed of the invaders // TODO FIX
+  int       m_row_number;     // The row number that the invader belongs to (i.e. 1st, 2nd, 3rd, 4th, or 5th)
 };
 
 ///////////////////////////////////////////////////////////////////////////
@@ -139,7 +142,7 @@ private:
 class MediumInvader : public LargeInvader
 {
 public:
-  MediumInvader(StudentWorld* world, int start_x, int start_y);
+  MediumInvader(StudentWorld* world, int start_x, int start_y, int row);
   virtual ~MediumInvader();
   
 private:
@@ -153,7 +156,7 @@ private:
 class SmallInvader : public LargeInvader
 {
 public:
-  SmallInvader(StudentWorld* world, int start_x, int start_y);
+  SmallInvader(StudentWorld* world, int start_x, int start_y, int row);
   virtual ~SmallInvader();
   
 private:

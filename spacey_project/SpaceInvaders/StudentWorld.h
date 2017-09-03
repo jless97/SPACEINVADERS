@@ -61,8 +61,9 @@ public:
   bool get_flying_saucer_count(void) const;         // Returns true if there is currently a flying saucer in the space field
   int get_invader_laser_count(void) const;          // Returns the number of lasers currently in the space field
   int get_current_invader_count(void) const;        // Returns the number of invaders left to destroy before completing the current level
-  /* Laser Collision Functions */
+  /* Laser Handling Functions */
   void check_collision(Actor* actor, bool is_player=true, bool is_invader=false); // Checks if there were any collisions between actor objects
+  bool is_invader_below(LargeInvader* invader);     // Returns true if there is an invader in the same column, that is a row beneath the invader
   /* Invader Movement Functions */
   /* Math Helper Functions */
   int max(int x, int y) ;                           // Returns the max of two numbers

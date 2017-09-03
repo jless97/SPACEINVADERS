@@ -132,11 +132,11 @@ int StudentWorld::move()
   if (!m_spaceship->is_alive())
   {
     if (wait_to_spawn < 50) { wait_to_spawn++; }
-    else { wait_to_spawn = 0; m_spaceship->set_alive(); }
+    else { wait_to_spawn = 0; m_spaceship->move_to(30, 4); m_spaceship->set_alive(); }
   }
   
   // If the player destroyed all 55 aliens in a round, then advance to the next round
-  if (get_current_invader_count() <= 0) { return GWSTATUS_FINISHED_LEVEL; }
+  if (get_current_invader_count() <= 54) { return GWSTATUS_FINISHED_LEVEL; }
   
   add_additional_actors(); // Add additional actors (i.e. flying saucer)
   
@@ -146,6 +146,8 @@ int StudentWorld::move()
     if (!(*it)->is_alive()) { delete *it; it = m_actors.erase(it); }
     else { it++; }
   }
+  
+  if (get_lives() <= 0) { return GWSTATUS_PLAYER_DIED; }
   
   return GWSTATUS_CONTINUE_GAME; // Continue with the level until one of the above conditions happens
 }
@@ -175,34 +177,34 @@ void StudentWorld::add_initial_actors(void)
   /// TODO: add barriers
   
   /// TODO: the rows of aliens start lower and lower as the rounds go on (and it resets at round 10 to original height)
-  // Adding Space Invaders
+  // Adding Space Invaders (1: 11, 2: 10, 3: 9, 4: 8, 5: 7, 6: 6, 7: 4, 8: 3, 9: 2, 10: 11, ...)
     // Add Large Invaders
   int j = 0;
   for (int i = 5; (j++ < 11); i += 5)
   {
-    new LargeInvader(this, i, 44);
+    new LargeInvader(this, i, 39, 1);
   }
   j = 0;
   for (int i = 5; (j++ < 11); i += 5)
   {
-    new LargeInvader(this, i, 48);
+    new LargeInvader(this, i, 44, 2);
   }
     // Add Medium Invaders
   j = 0;
   for (int i = 5; (j++ < 11); i += 5)
   {
-    new MediumInvader(this, i, 52);
+    new MediumInvader(this, i, 49, 3);
   }
   j = 0;
   for (int i = 5; (j++ < 11); i += 5)
   {
-    new MediumInvader(this, i, 56);
+    new MediumInvader(this, i, 54, 4);
   }
     // Add Small Invaders
   j = 0;
   for (int i = 5; (j++ < 11); i += 5)
   {
-    new SmallInvader(this, i, 60);
+    new SmallInvader(this, i, 59, 5);
   }
 }
 
@@ -272,7 +274,7 @@ int StudentWorld::get_invader_laser_count(void) const { return m_invader_laser_c
 int StudentWorld::get_current_invader_count(void) const { return m_current_invader_count; }
 
 ///////////////////////////////////////////////////////////////////////////
-////////////-----------COLLISION-HANDLING FUNCTION-------------////////////
+//////////////-----------LASER-HANDLING FUNCTION-------------//////////////
 ///////////////////////////////////////////////////////////////////////////
 
 void StudentWorld::check_collision(Actor* actor, bool is_player, bool is_invader) {
@@ -361,10 +363,41 @@ void StudentWorld::check_collision(Actor* actor, bool is_player, bool is_invader
   }
 }
 
+bool StudentWorld::is_invader_below(LargeInvader* invader)
+{
+  for (int i = 0; i < m_actors.size(); i++)
+  {
+    if (m_actors[i]->get_id() == IID_LARGE_INVADER || m_actors[i]->get_id() == IID_MEDIUM_INVADER || m_actors[i]->get_id() == IID_SMALL_INVADER)
+    {
+      switch (invader->get_row_number())
+      {
+        case 1:
+          if ((invader != m_actors[i]) && (invader->get_x() == m_actors[i]->get_x())) { return true; }
+          break;
+        case 2:
+          if ((invader != m_actors[i]) && (invader->get_x() == m_actors[i]->get_x()) && (invader->get_y() >= m_actors[i]->get_y())) { return true; }
+          break;
+        case 3:
+          if ((invader != m_actors[i]) && (invader->get_x() == m_actors[i]->get_x()) && (invader->get_y() >= m_actors[i]->get_y())) { return true; }
+          break;
+        case 4:
+          if ((invader != m_actors[i]) && (invader->get_x() == m_actors[i]->get_x()) && (invader->get_y() >= m_actors[i]->get_y())) { return true; }
+          break;
+        case 5:
+          if ((invader != m_actors[i]) && (invader->get_x() == m_actors[i]->get_x()) && (invader->get_y() >= m_actors[i]->get_y())) { return true; }
+          break;
+        default:
+          break;
+      }
+    }
+  }
+  
+  return false;
+}
+
 ///////////////////////////////////////////////////////////////////////////
 /////////////-----------INVADER-MOVEMENT FUNCTION-------------/////////////
 ///////////////////////////////////////////////////////////////////////////
-
 
 ///////////////////////////////////////////////////////////////////////////
 /////////////-----------MATH/MATH HELPER FUNCTIONS-------------////////////
@@ -394,7 +427,7 @@ void StudentWorld::init_border(void)
   {
     for (int j = 0; j < 1; j++)
     {
-      m_border[i][j] = new Border(this, i, j + 5);
+      m_border[i][j] = new Border(this, i, j + 1);
     }
   }
 }

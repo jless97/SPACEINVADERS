@@ -42,8 +42,15 @@ public:
    : m_image_id(image_id), m_visible(false), m_x(start_x), m_y(start_y), m_destX(start_x), m_destY(start_y), m_brightness(1.0),
      m_animationNumber(0), m_direction(dir), m_size(size), m_depth(depth)
   { if (m_size <= 0) { m_size = 1; } get_graph_objects(m_depth).insert(this); }
+  /* Mutator Functions */
+  void set_id(int image_id) { m_image_id = image_id; }
   void set_visible(bool should_i_display) { m_visible = should_i_display; }     // Set the visibility state of the objects (i.e. visible or invisible)
+  void set_direction(Direction d) { m_direction = d; }                          // Set the current direction of the actor
   void set_brightness(double brightness) { m_brightness = brightness; }         // Set the brightness of the actor's image
+  /* Accessor Functions */
+  unsigned int get_id() const { return m_image_id; }                            // ID tag of the actor
+  bool is_visible() const { return m_visible; }                                 // Is the actor object visible
+  Direction get_direction() const { return m_direction; }                       // Get the current direction of the actor
   int get_x() const                                                             // Get the actor's X coordinate
   {
     // If already moved but not yet animated, use new location anyway.
@@ -54,17 +61,12 @@ public:
     // If already moved but not yet animated, use new location anyway.
     return round_away_from_zero(m_destY);
   }
-  void set_id(int image_id) { m_image_id = image_id; }
-  void move_to(int x, int y) { m_destX = x; m_destY = y; increase_animation_number(); } // Update the loaction of the actor
-  Direction get_direction() const { return m_direction; }                       // Get the current direction of the actor
-  void set_direction(Direction d) { m_direction = d; }                          // Set the current direction of the actor
   double get_size() const { return m_size; }                                    // Get the size of the actor object
-  /* The following should be used by only the framework, not the student */
-  bool is_visible() const { return m_visible; }                                 // Is the actor object visible
-  unsigned int get_id() const { return m_image_id; }                            // ID tag of the actor
   double get_brightness() const { return m_brightness; }                        // Brightness setting of the actor object
   unsigned int get_animation_number() const { return m_animationNumber; }       // Animation number
   void get_animation_location(double& x, double& y) const { x = m_x; y = m_y; } // Location of the actor object to be displayed
+  /* Graphic Object Updates */
+  void move_to(int x, int y) { m_destX = x; m_destY = y; increase_animation_number(); } // Update the loaction of the actor
   void animate() { move_a_little(m_x, m_destX); move_a_little(m_y, m_destY); }  // Animate the actor object on the screen
   static std::set<GraphObject*>& get_graph_objects(unsigned int layer)          // Graph Object stuff
   {

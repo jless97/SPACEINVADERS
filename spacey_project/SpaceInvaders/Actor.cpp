@@ -125,8 +125,9 @@ Spaceship::~Spaceship() {}
 //////////////////-----------LARGE INVADER--------------///////////////////
 ///////////////////////////////////////////////////////////////////////////
 
-LargeInvader::LargeInvader(StudentWorld* world, int start_x, int start_y, int image_id, double image_size, int dir)
-: Spaceship(world, start_x, start_y, image_id, image_size), m_direction(dir), m_next_direction(0), m_can_move(0) { world->add_actor(this); }
+LargeInvader::LargeInvader(StudentWorld* world, int start_x, int start_y, int row, int image_id, double image_size, int dir)
+: Spaceship(world, start_x, start_y, image_id, image_size), m_direction(dir), m_next_direction(0), m_can_move(0), m_row_number(row)
+{ world->add_actor(this); }
 
 void LargeInvader::do_something(void)
 {  
@@ -156,7 +157,7 @@ void LargeInvader::do_something(void)
       break;
     case 2:
       if (!is_alive()) { return; } // Check the current status of the invader object
-      move_to(x, y - 2);
+      move_to(x, y - 3);
       if (!is_alive()) { return; } // Check the current status of the invader object
       set_movement_direction(get_next_movement_direction());
     default:
@@ -167,26 +168,26 @@ void LargeInvader::do_something(void)
   if (invader_world->get_invader_laser_count() < 3)
   {
     // Chance an invader will shoot a laser
-    if (rand() % 150 == 1)
+    if (rand() % 40 == 1)
     {
       // Chance it is a faster laser
-      if (rand() % 75 == 1)
+      if (rand() % 10 == 1)
       {
         // Fast laser
-        if (rand() % 15 == 1)
+        if (rand() % 10 == 1)
         {
-          new FastLaser(invader_world, x, y - 1, Laser::LaserClass::fast_laser);
+          if (!invader_world->is_invader_below(this)) { new FastLaser(invader_world, x, y - 1, Laser::LaserClass::fast_laser); }
         }
         // Medium laser
         else
         {
-          new MediumLaser(invader_world, x, y - 1, Laser::LaserClass::medium_laser);
+          if (!invader_world->is_invader_below(this)) { new MediumLaser(invader_world, x, y - 1, Laser::LaserClass::medium_laser); }
         }
       }
       // Slow laser
       else
       {
-        new SlowLaser(invader_world, x, y - 1, Laser::LaserClass::slow_laser);
+        if (!invader_world->is_invader_below(this)) { new SlowLaser(invader_world, x, y - 1, Laser::LaserClass::slow_laser); }
       }
       
     }
@@ -199,13 +200,17 @@ void LargeInvader::set_movement_direction(int dir) { if (this == nullptr) { retu
 
 void LargeInvader::set_next_movement_direction(int dir) { if (this == nullptr) { return; } m_next_direction = dir; }
 
-void LargeInvader::set_can_move_status(int value) { m_can_move = value; }
+void LargeInvader::set_can_move_status(int value) { if (this == nullptr) { return; } m_can_move = value; }
+
+void LargeInvader::set_row_number(int value) { if (this == nullptr) { return; } m_row_number = value; }
 
 int LargeInvader::get_movement_direction(void) { if (this == nullptr) { return -1; } return m_direction; }
 
-int LargeInvader::get_next_movement_direction(void) { return m_next_direction; }
+int LargeInvader::get_next_movement_direction(void) { if (this == nullptr) { return -1; } return m_next_direction; }
 
-int LargeInvader::get_can_move_status(void) const { if (this == nullptr) { return -1; } return m_can_move; }
+int LargeInvader::get_can_move_status(void) { if (this == nullptr) { return -1; } return m_can_move; }
+
+int LargeInvader::get_row_number(void) { if (this == nullptr) { return -1; } return m_row_number; }
 
 LargeInvader::~LargeInvader() { world()->update_current_invader_count(-1); }
         
@@ -213,8 +218,8 @@ LargeInvader::~LargeInvader() { world()->update_current_invader_count(-1); }
 //////////////////-----------MEDIUM INVADER--------------//////////////////
 ///////////////////////////////////////////////////////////////////////////
 
-MediumInvader::MediumInvader(StudentWorld* world, int start_x, int start_y)
-: LargeInvader(world, start_x, start_y, IID_MEDIUM_INVADER, 0.9) {}
+MediumInvader::MediumInvader(StudentWorld* world, int start_x, int start_y, int row)
+: LargeInvader(world, start_x, start_y, row, IID_MEDIUM_INVADER, 0.9) {}
 
 MediumInvader::~MediumInvader() {}
 
@@ -222,8 +227,8 @@ MediumInvader::~MediumInvader() {}
 //////////////////-----------SMALL INVADER--------------///////////////////
 ///////////////////////////////////////////////////////////////////////////
 
-SmallInvader::SmallInvader(StudentWorld* world, int start_x, int start_y)
-: LargeInvader(world, start_x, start_y, IID_SMALL_INVADER, 0.8) {}
+SmallInvader::SmallInvader(StudentWorld* world, int start_x, int start_y, int row)
+: LargeInvader(world, start_x, start_y, row, IID_SMALL_INVADER, 0.8) {}
 
 SmallInvader::~SmallInvader() {}
 
