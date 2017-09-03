@@ -100,6 +100,7 @@ Laser::Laser(StudentWorld* world, int start_x, int start_y, bool player_spaceshi
 : Actor(world, image_id, start_x, start_y, dir, 0.50, 1), m_spaceship_laser(true)
 {
   world->add_actor(this);
+  world->play_sound(SOUND_LASER);
   if (get_projectile_viewpoint()) { world->update_spaceship_laser_count(true); }
   else { world->update_alien_laser_count(1); }
 }

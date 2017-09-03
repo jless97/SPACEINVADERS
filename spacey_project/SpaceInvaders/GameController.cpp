@@ -134,25 +134,13 @@ void GameController::init_drawers_and_sounds(void)
 
 	SoundMapType::value_type sounds[] = {
 		make_pair(SOUND_THEME					, "theme.wav"),
-		make_pair(SOUND_PROTESTER_YELL		   , "goaway.wav"),
-		make_pair(SOUND_PROTESTER_GIVE_UP		, "giveup.wav"),
-		make_pair(SOUND_PLAYER_GIVE_UP			   , "die.wav"),
-		make_pair(SOUND_GOT_GOODIE			   , "woohoo.wav"),
-		make_pair(SOUND_FINISHED_LEVEL		   , "finished.wav"),
-		make_pair(SOUND_PROTESTER_ANNOYED		   , "ouch.wav"),
-		make_pair(SOUND_PROTESTER_FOUND_GOLD , "bribed.wav"),			// to add
-		make_pair(SOUND_FOUND_OIL,				"foundoil.wav"),			// to add
-		make_pair(SOUND_SONAR				   , "sonar.wav"),
-		make_pair(SOUND_DIG,					"digging.wav"),
-		make_pair(SOUND_FALLING_ROCK, "rockslide.wav"),
-        
     make_pair(SOUND_ALIEN_MOVE_1,   "fastinvader1.wav"),
     make_pair(SOUND_ALIEN_MOVE_2,   "fastinvader2.wav"),
     make_pair(SOUND_ALIEN_MOVE_3,   "fastinvader3.wav"),
     make_pair(SOUND_ALIEN_MOVE_4,   "fastinvader4.wav"),
     make_pair(SOUND_PLAYER_KILLED,  "explosion.wav"),
     make_pair(SOUND_ALIEN_KILLED,   "invaderkilled.wav"),
-    make_pair(SOUND_PLAYER_SHOOT,   "shoot.wav"),
+    make_pair(SOUND_LASER,          "shoot.wav"),
     make_pair(SOUND_SAUCER_MOVE_1,  "ufo_lowpitch.wav"),
     make_pair(SOUND_SAUCER_MOVE_2,  "ufo_highpitch.wav"),
 	};

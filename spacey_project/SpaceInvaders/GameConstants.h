@@ -54,7 +54,7 @@ const int SOUND_ALIEN_MOVE_3            = 2;
 const int SOUND_ALIEN_MOVE_4            = 3;
 const int SOUND_PLAYER_KILLED           = 4;
 const int SOUND_ALIEN_KILLED            = 5;
-const int SOUND_PLAYER_SHOOT            = 6;
+const int SOUND_LASER                   = 6;
 const int SOUND_SAUCER_MOVE_1           = 7;
 const int SOUND_SAUCER_MOVE_2           = 8;
 
