@@ -54,6 +54,7 @@ public:
     // If already moved but not yet animated, use new location anyway.
     return round_away_from_zero(m_destY);
   }
+  void set_id(int image_id) { m_image_id = image_id; }
   void move_to(int x, int y) { m_destX = x; m_destY = y; increase_animation_number(); } // Update the loaction of the actor
   Direction get_direction() const { return m_direction; }                       // Get the current direction of the actor
   void set_direction(Direction d) { m_direction = d; }                          // Set the current direction of the actor

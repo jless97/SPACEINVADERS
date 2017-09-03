@@ -144,18 +144,17 @@ void LargeInvader::do_something(void)
       break;
   }
   
-  cout << "LASER COUNT: " << invader_world->get_invader_laser_count() << endl;
   // Check if invaders should shoot lasers
   if (invader_world->get_invader_laser_count() < 3)
   {
     // Chance an invader will shoot a laser
-    if (rand() % 10 == 1)
+    if (rand() % 80 == 1)
     {
       // Chance it is a faster laser
-      if (rand() % 5 == 1)
+      if (rand() % 30 == 1)
       {
         // Fast laser
-        if (rand() % 3 == 1)
+        if (rand() % 10 == 1)
         {
           new FastLaser(invader_world, x, y - 1, Laser::LaserClass::fast_laser);
         }
@@ -196,7 +195,7 @@ LargeInvader::~LargeInvader() { world()->update_current_invader_count(-1); }
 ///////////////////////////////////////////////////////////////////////////
 
 MediumInvader::MediumInvader(StudentWorld* world, int start_x, int start_y)
-: LargeInvader(world, start_x, start_y, IID_HARD_CORE_PROTESTER, 0.75) {}
+: LargeInvader(world, start_x, start_y, IID_MEDIUM_INVADER, 0.9) {}
 
 MediumInvader::~MediumInvader() {}
 
@@ -205,18 +204,44 @@ MediumInvader::~MediumInvader() {}
 ///////////////////////////////////////////////////////////////////////////
 
 SmallInvader::SmallInvader(StudentWorld* world, int start_x, int start_y)
-: LargeInvader(world, start_x, start_y, IID_PLAYER, 0.5) {}
+: LargeInvader(world, start_x, start_y, IID_SMALL_INVADER, 0.8) {}
 
 SmallInvader::~SmallInvader() {}
+
+///////////////////////////////////////////////////////////////////////////
+////////////////-----------INVADER EXPLOSION--------------/////////////////
+///////////////////////////////////////////////////////////////////////////
+
+InvaderExplosion::InvaderExplosion(StudentWorld* world, int start_x, int start_y)
+: Actor(world, IID_INVADER_KILLED, start_x, start_y, Direction::right, 1.0, 0), m_display(0) { world->add_actor(this); }
+
+void InvaderExplosion::do_something(void)
+{
+  if (m_display == 6) { set_dead(); return; }
+  m_display++;
+}
+
+InvaderExplosion::~InvaderExplosion() {}
 
 ///////////////////////////////////////////////////////////////////////////
 ///////////////////-----------FLYINGSAUCER--------------///////////////////
 ///////////////////////////////////////////////////////////////////////////
 
 FlyingSaucer::FlyingSaucer(StudentWorld* world, int start_x, int start_y)
-: Actor(world, IID_GOLD, start_x, start_y, Direction::up, 1.0, 0) { world->add_actor(this); }
+: Actor(world, IID_FLYING_SAUCER, start_x, start_y, Direction::right, 1.0, 0) { world->add_actor(this); world->update_flying_saucer_count(true); }
 
-FlyingSaucer::~FlyingSaucer() {}
+void FlyingSaucer::do_something(void)
+{
+  if (!is_alive()) { return; } // Check the current status of the flying saucer
+  
+  int x = get_x(), y = get_y(); // Get the current coordinates of the flying saucer
+  
+  move_to(x - 1, y);
+  
+  if (x <= -5) { set_dead(); }
+}
+
+FlyingSaucer::~FlyingSaucer() { world()->update_flying_saucer_count(false); }
 
 ///////////////////////////////////////////////////////////////////////////
 //////////////////////-----------BARRIER--------------/////////////////////
@@ -301,7 +326,7 @@ Laser::~Laser()
 ///////////////////////////////////////////////////////////////////////////
 
 SlowLaser::SlowLaser(StudentWorld* world, int start_x, int start_y, Laser::LaserClass laser_class)
-: Laser(world, start_x, start_y, laser_class, IID_WATER_SPURT, Direction::down) { set_laser_speed(LaserClass::slow_laser); }
+: Laser(world, start_x, start_y, laser_class, IID_SLOW_LASER, Direction::left) { set_laser_speed(LaserClass::slow_laser); }
 
 SlowLaser::~SlowLaser() {}
 
@@ -310,7 +335,7 @@ SlowLaser::~SlowLaser() {}
 ///////////////////////////////////////////////////////////////////////////
 
 MediumLaser::MediumLaser(StudentWorld* world, int start_x, int start_y, Laser::LaserClass laser_class)
-: Laser(world, start_x, start_y, laser_class, IID_WATER_SPURT, Direction::down) { set_laser_speed(LaserClass::medium_laser); }
+: Laser(world, start_x, start_y, laser_class, IID_MEDIUM_LASER, Direction::left) { set_laser_speed(LaserClass::medium_laser); }
 
 MediumLaser::~MediumLaser() {}
 
@@ -319,7 +344,7 @@ MediumLaser::~MediumLaser() {}
 ///////////////////////////////////////////////////////////////////////////
 
 FastLaser::FastLaser(StudentWorld* world, int start_x, int start_y, Laser::LaserClass laser_class)
-: Laser(world, start_x, start_y, laser_class, IID_WATER_SPURT, Direction::down) { set_laser_speed(LaserClass::fast_laser); }
+: Laser(world, start_x, start_y, laser_class, IID_MEDIUM_LASER, Direction::left) { set_laser_speed(LaserClass::fast_laser); }
 
 FastLaser::~FastLaser() {}
 

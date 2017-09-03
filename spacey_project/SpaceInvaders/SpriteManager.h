@@ -33,7 +33,7 @@ public:
 		std::string line;
 		std::string contents = "";
 		std::ifstream tga_file(filename_tga, std::ios::in|std::ios::binary);
-
+    
     if (!tga_file) { return false; }
 
 		char type[3];
@@ -54,16 +54,16 @@ public:
 		image_size = texture_width * texture_height * byte_count;
 		image_data = new char[image_size];
 		tga_file.seekg(18);
-    
+
     // Read image data
 		tga_file.read(image_data, image_size);
 		if (!tga_file) { delete [] image_data; return false; }
 
     //image type either 2 (color) or 3 (greyscale)
-    if (type[1] != 0 || (type[2] != 2 && type[2] != 3)) { return false; }
+    //if (type[1] != 0 || (type[2] != 2 && type[2] != 3)) { return false; }
 
-    if (byte_count != 3 && byte_count != 4) { return false; }
-
+    //if (byte_count != 3 && byte_count != 4) { return false; }
+    
     // Transfer Texture To OpenGL
 		glEnable(GL_DEPTH_TEST);
 
@@ -74,7 +74,7 @@ public:
     // bind our new texture
 		glBindTexture(GL_TEXTURE_2D, gl_texture_id);
 
-		glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+    glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 
 		if (m_mip_mapped)
 		{
@@ -129,10 +129,10 @@ public:
 	bool plot_sprite(int image_id, int frame, double gx, double gy, double gz, Angle angle_degrees, double size)
 	{
 		unsigned int sprite_id = getsprite_id(image_id,frame);
-    if (INVALID_SPRITE_ID == sprite_id) { return false; }
+    if (INVALID_SPRITE_ID == sprite_id) { std::cout << "INVALID" << std::endl; return false; }
 
 		auto it = m_image_map.find(sprite_id);
-		if (it == m_image_map.end()) { return false; }
+		if (it == m_image_map.end()) { std::cout << "NICE TRY" << std::endl; return false; }
 
 		glPushMatrix();
 
@@ -229,7 +229,7 @@ private:
 
 	int getsprite_id(unsigned int image_id, unsigned int frame) const
 	{
-    if (image_id >= MAX_IMAGES || frame >= MAX_FRAMES_PER_SPRITE) { return INVALID_SPRITE_ID; }
+    if (image_id >= MAX_IMAGES || frame >= MAX_FRAMES_PER_SPRITE) { std::cout << "INVALID SPRITE" << std::endl; return INVALID_SPRITE_ID; }
 		return image_id * MAX_FRAMES_PER_SPRITE + frame;
 	}
 };

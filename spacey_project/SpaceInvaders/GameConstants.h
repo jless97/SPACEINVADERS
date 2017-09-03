@@ -5,48 +5,33 @@
 ///////////////////////-----------IMAGES--------------/////////////////////
 ///////////////////////////////////////////////////////////////////////////
 
-const int IID_PLAYER		   = 12;
-const int IID_PROTESTER		   = 13;
-const int IID_HARD_CORE_PROTESTER = 14;     // (Small Invader)
 const int IID_WATER_SPURT	   = 15;
 const int IID_BOULDER		   = 16;        // (Large Invader)
 const int IID_BARREL		   = 17;        // (Medium Invader)
 const int IID_DIRT			   = 18;
-const int IID_GOLD			   = 19;        // (Flying Saucer)
 const int IID_SONAR			   = 20;
 const int IID_WATER_POOL	   = 21;
 
 const int IID_SPACESHIP        = 0;
-const int IID_INVADER_1        = 1;
-const int IID_INVADER_2        = 2;
-const int IID_INVADER_3        = 3;
-const int IID_SAUCER           = 4;
+const int IID_LARGE_INVADER    = 1;
+const int IID_MEDIUM_INVADER   = 2;
+const int IID_SMALL_INVADER    = 3;
+const int IID_FLYING_SAUCER    = 4;
 const int IID_BARRIER          = 5;
 const int IID_PLAYER_LASER     = 6;
 const int IID_SLOW_LASER       = 7;
 const int IID_MEDIUM_LASER     = 8;
 const int IID_FAST_LASER       = 9;
 const int IID_PLAYER_KILLED    = 10;
-const int IID_ALIEN_KILLED     = 11;
+const int IID_INVADER_KILLED   = 11;
 
 ///////////////////////////////////////////////////////////////////////////
 //////////////////////----------- SOUNDS--------------/////////////////////
 ///////////////////////////////////////////////////////////////////////////
 
 const int SOUND_THEME					= 9;
-const int SOUND_PROTESTER_GIVE_UP		= 10;
-const int SOUND_PLAYER_GIVE_UP			= 11;
-const int SOUND_PROTESTER_YELL			= 12;
-const int SOUND_PLAYER_SQUIRT			= 13;
-const int SOUND_GOT_GOODIE				= 14;
 const int SOUND_DIG						= 15;
 const int SOUND_FINISHED_LEVEL			= 16;
-const int SOUND_FOUND_OIL				= 17;
-const int SOUND_PROTESTER_ANNOYED		= 18;
-const int SOUND_PLAYER_ANNOYED			= 19;
-const int SOUND_PROTESTER_FOUND_GOLD	= 20;
-const int SOUND_SONAR					= 21;
-const int SOUND_FALLING_ROCK			= 22;
 
 const int SOUND_ALIEN_MOVE_1            = 0;
 const int SOUND_ALIEN_MOVE_2            = 1;

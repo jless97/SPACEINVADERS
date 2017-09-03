@@ -75,7 +75,7 @@ struct SpriteInfo
 {
 	unsigned int image_id;
 	unsigned int frame_num;
-	std::string	 tga_fileName;
+	std::string	 tga_filename;
 };
 
 ///////////////////////////////////////////////////////////////////////////
@@ -93,41 +93,27 @@ static void draw_score_and_lives(string);
 void GameController::init_drawers_and_sounds(void)
 {
 	SpriteInfo drawers[] = {
-//    { IID_SPACESHIP,        0, "player.tga" },
-//    { IID_INVADER_1,        0, "invader1.tga" },
-//    { IID_INVADER_1,        1, "invader2.tga" },
-//    { IID_INVADER_2,        0, "invader3.tga" },
-//    { IID_INVADER_2,        1, "invader4.tga" },
-//    { IID_INVADER_3,        0, "invader5.tga" },
-//    { IID_INVADER_3,        1, "invader6.tga" },
-//    { IID_SAUCER,           0, "saucer.tga" },
+    { IID_SPACESHIP,        0, "player.tga" },
+    { IID_LARGE_INVADER,    0, "large_invader.tga" },
+    { IID_LARGE_INVADER,    1, "large_invader2.tga" },
+    { IID_MEDIUM_INVADER,   0, "medium_invader.tga" },
+    { IID_MEDIUM_INVADER,   1, "medium_invader2.tga" },
+    { IID_SMALL_INVADER,    0, "small_invader.tga" },
+    { IID_SMALL_INVADER,    1, "small_invader2.tga" },
+    { IID_FLYING_SAUCER,    0, "flying_saucer.tga" },
 //    { IID_BARRIER,          0, "barrier.tga" },
-//    { IID_PLAYER_LASER,     0, "player_laser.tga" },
-//    { IID_SLOW_LASER,       0, "slow_laser.tga" },
-//    { IID_MEDIUM_LASER,     0, "medium_laser.tga" },
+    { IID_PLAYER_LASER,     0, "player_laser.tga" },
+    { IID_SLOW_LASER,       0, "slow_laser.tga" },
+    { IID_MEDIUM_LASER,     0, "medium_laser.tga" },
 //    { IID_FAST_LASER,       0, "fast_laser.tga" },
 //    { IID_PLAYER_KILLED,    0, "explosion1.tga" },
 //    { IID_PLAYER_KILLED,    1, "explosion2.tga" },
-//    { IID_ALIEN_KILLED,     0, "invaderkilled.tga" },
+    { IID_INVADER_KILLED,   0, "invaderkilled.tga" },
 
-		{ IID_PLAYER		   , 0, "frack1.tga"},
-    { IID_PLAYER, 1, "frack2.tga"},
-		{ IID_PROTESTER, 0, "protester1.tga"},
-		{ IID_PROTESTER, 1, "protester2.tga" },
-		{ IID_HARD_CORE_PROTESTER, 0, "hardcore1.tga" },
-		{ IID_HARD_CORE_PROTESTER, 1, "hardcore2.tga" },
 		{ IID_WATER_SPURT, 0, "water1.tga" },
 		{ IID_WATER_SPURT, 1, "water2.tga" },
 		{ IID_WATER_SPURT, 2, "water3.tga" },
-		{ IID_BARREL , 0, "barrel.tga"},
-		{ IID_GOLD, 0, "gold.tga" },
-		{ IID_SONAR, 0, "sonar.tga" },
-		{ IID_WATER_POOL , 0, "waterpool.tga" },
 		{ IID_DIRT, 0, "dirt.tga" },
-		{ IID_BOULDER, 0, "rock1.tga" },
-		{ IID_BOULDER, 1, "rock2.tga" },
-		{ IID_BOULDER, 2, "rock3.tga" },
-		{ IID_BOULDER, 3, "rock4.tga" },
   };
 
 	SoundMapType::value_type sounds[] = {
@@ -150,7 +136,7 @@ void GameController::init_drawers_and_sounds(void)
 		string path = m_gw->asset_directory();
     if (!path.empty()) { path += '/'; }
 		const SpriteInfo& d = drawers[k];
-    if (!m_sprite_manager.load_sprite(path + d.tga_fileName, d.image_id, d.frame_num)) { exit(0); }
+    if (!m_sprite_manager.load_sprite(path + d.tga_filename, d.image_id, d.frame_num)) { cout << "ERROR2" << endl; exit(0); }
 	}
   for (int k = 0; k < sizeof(sounds)/sizeof(sounds[0]); k++) { m_sound_map[sounds[k].first] = sounds[k].second; }
 }

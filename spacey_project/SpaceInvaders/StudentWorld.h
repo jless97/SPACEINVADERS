@@ -49,13 +49,16 @@ public:
   void update_scoreboard(void);                     // Update the scoreboard display
   /* Mutator Functions */
   void update_spaceship_laser_count(bool how_much); // Updates the status of the player's laser in the space field
+  void update_flying_saucer_count(bool how_much);   // Updates the status of the flying saucer in the space field
   void update_invader_laser_count(int how_much);    // Updates the current number of enemy lasers in the space field
   void update_current_invader_count(int how_much);  // Update the number of invaders left to destroy before advancing to the next level
   void set_spaceship_laser_count(void);             // Sets the status of the player's laser in the space field
+  void set_flying_saucer_count(void);               // Sets the status of the flying saucer in the space field
   void set_invader_laser_count(void);               // Sets the current number of enemy lasers in the space field
   void set_current_invader_count(void);             // Resets the number of invaders to destroy per round (to 55)
   /* Accessor Functions */
-  bool get_spaceship_laser_count(void) const;       // Returns if there is a player laser currently in the space field
+  bool get_spaceship_laser_count(void) const;       // Returns true if there is a player laser currently in the space field
+  bool get_flying_saucer_count(void) const;         // Returns true if there is currently a flying saucer in the space field
   int get_invader_laser_count(void) const;          // Returns the number of lasers currently in the space field
   int get_current_invader_count(void) const;        // Returns the number of invaders left to destroy before completing the current level
   /* Laser Collision Functions */
@@ -71,6 +74,7 @@ private:
   Spaceship*          m_spaceship;                  // Player Spaceship
   std::vector<Actor*> m_actors;                     // All actor objects (i.e. space invaders, flying saucer, lasers, perhaps barriers too)
   bool                m_spaceship_laser_count;      // Variable to keep track if the player currently has a laser in the space field
+  bool                m_flying_saucer_count;        // Variable to keep track if there is currently a flying saucer (UFO) in the space field
   int                 m_invader_laser_count;        // Variable to keep track of all of the invaders' lasers in the space field (as there is a cap)
   int                 m_current_invader_count;      // Variable to keep track of how many aliens have been killed by the player
 };

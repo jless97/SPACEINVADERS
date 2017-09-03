@@ -21,7 +21,7 @@ int main(int argc, char* argv[]) {
 		string path = asset_directory;
 		if (!path.empty())
 			path += '/';
-		const string someAsset = "player.tga";
+		const string someAsset = "barrier.tga";
 		ifstream ifs(path + someAsset);
 		if (!ifs) {
 			cout << "Cannot find " << someAsset << " in ";

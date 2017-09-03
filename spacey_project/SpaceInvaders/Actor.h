@@ -51,7 +51,7 @@ private:
 class Spaceship : public Actor
 {
 public:
-  Spaceship(StudentWorld* world, int start_x=30, int start_y=12, int image_id=IID_PLAYER, double image_size=1.0);
+  Spaceship(StudentWorld* world, int start_x=30, int start_y=12, int image_id=IID_SPACESHIP, double image_size=1.0);
   virtual void do_something(void);
   virtual ~Spaceship();
   
@@ -62,11 +62,11 @@ private:
 //////////////////-----------LARGE INVADER--------------///////////////////
 ///////////////////////////////////////////////////////////////////////////
 
-// IID_PROTESTER
+// IID_LARGE_INVADER
 class LargeInvader : public Spaceship
 {
 public:
-  LargeInvader(StudentWorld* world, int start_x, int start_y, int image_id=IID_PROTESTER, double image_size=1.0, int dir=1);
+  LargeInvader(StudentWorld* world, int start_x, int start_y, int image_id=IID_LARGE_INVADER, double image_size=1.0, int dir=1);
   virtual void do_something(void);
   /* Mutator Functions */
   void update_can_move_status(int how_much);      // Updates the status of when the invaders can move again
@@ -89,7 +89,7 @@ private:
 //////////////////-----------MEDIUM INVADER--------------//////////////////
 ///////////////////////////////////////////////////////////////////////////
 
-// IID_HARDCORE_PROTESTER
+// IID_MEDIUM_INVADER
 class MediumInvader : public LargeInvader
 {
 public:
@@ -103,23 +103,42 @@ private:
 ///////////////////-----------SMALL INVADER--------------//////////////////
 ///////////////////////////////////////////////////////////////////////////
 
-// IID_PLAYER
+// IID_SMALL_INVADER
 class SmallInvader : public LargeInvader
 {
 public:
   SmallInvader(StudentWorld* world, int start_x, int start_y);
   virtual ~SmallInvader();
+  
+private:
+};
+
+///////////////////////////////////////////////////////////////////////////
+////////////////-----------INVADER EXPLOSION--------------/////////////////
+///////////////////////////////////////////////////////////////////////////
+
+// IID_INVADER_KILLED
+class InvaderExplosion : public Actor
+{
+public:
+  InvaderExplosion(StudentWorld* world, int start_x, int start_y);
+  virtual void do_something(void);
+  virtual ~InvaderExplosion();
+  
+private:
+  int m_display;
 };
 
 ///////////////////////////////////////////////////////////////////////////
 ///////////////////-----------FLYINGSAUCER--------------///////////////////
 ///////////////////////////////////////////////////////////////////////////
 
-// IID_GOLD
+// IID_FLYING_SAUCER
 class FlyingSaucer : public Actor
 {
 public:
   FlyingSaucer(StudentWorld* world, int start_x, int start_y);
+  virtual void do_something(void);
   virtual ~FlyingSaucer();
   
 private:
@@ -141,7 +160,7 @@ private:
 ///////////////////////-----------LASER--------------//////////////////////
 ///////////////////////////////////////////////////////////////////////////
 
-// IID_WATERSQUIRT
+// IID_PLAYER_LASER
 class Laser : public Actor
 {
 public:
@@ -152,7 +171,7 @@ public:
     medium_laser = 2,
     fast_laser = 3
   };
-  Laser(StudentWorld* world, int start_x, int start_y, Laser::LaserClass laser_class, int image_id=IID_WATER_SPURT, Direction dir=up);
+  Laser(StudentWorld* world, int start_x, int start_y, Laser::LaserClass laser_class, int image_id=IID_PLAYER_LASER, Direction dir=right);
   virtual void do_something(void);
   Laser::LaserClass get_projectile_viewpoint(void) const; // Returns the class of the laser (i.e. player, slow, medium, or fast)
   virtual void set_laser_speed(Laser::LaserClass value);  // Sets the class of the laser (i.e. player, slow, medium, or fast)
