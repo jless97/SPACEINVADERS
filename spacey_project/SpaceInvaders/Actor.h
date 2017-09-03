@@ -5,7 +5,7 @@
  * The main function of each actor is to do something each clock tick
  *
  * $LastChangedBy: jless $
- * $LastChangedDate: 2017-08-23 11:11:11 -0700 (Wed, 23 Aug 2017) $
+ * $LastChangedDate: 2017-09-02 11:11:11 -0700 (Sat, 02 Sep 2017) $
  *
  ******************************************************************************/
 
@@ -51,7 +51,7 @@ private:
 class Spaceship : public Actor
 {
 public:
-  Spaceship(StudentWorld* current_world, int start_x=30, int start_y=5);
+  Spaceship(StudentWorld* world, int start_x=30, int start_y=5, int image_id=IID_PLAYER, double image_size=1.0);
   virtual void do_something(void);
   virtual ~Spaceship();
   
@@ -66,7 +66,7 @@ private:
 class LargeInvader : public Spaceship
 {
 public:
-  LargeInvader(StudentWorld* world, int start_x, int start_y);
+  LargeInvader(StudentWorld* world, int start_x, int start_y, int image_id=IID_BOULDER, double image_size=1.0);
   virtual void do_something(void);
   virtual ~LargeInvader();
   
@@ -134,14 +134,21 @@ private:
 class Laser : public Actor
 {
 public:
-  Laser(StudentWorld* world, int start_x, int start_y, bool player_spaceship_laser, int image_id=IID_WATER_SPURT, Direction dir=up);
+  enum LaserClass
+  {
+    player_laser = 0,
+    slow_laser = 1,
+    medium_laser = 2,
+    fast_laser = 3
+  };
+  Laser(StudentWorld* world, int start_x, int start_y, Laser::LaserClass laser_class, int image_id=IID_WATER_SPURT, Direction dir=up);
   virtual void do_something(void);
-  virtual unsigned int laser_speed(void) const;   // Returns the class of the laser (i.e. player laser, aliens slow, medium, or fast laser
-  bool get_projectile_viewpoint(void) const;      // Returns true if the laser belongs to the player spaceship (and false if it is an alien's)
+  Laser::LaserClass get_projectile_viewpoint(void) const; // Returns the class of the laser (i.e. player, slow, medium, or fast)
+  virtual void set_laser_speed(Laser::LaserClass value);  // Sets the class of the laser (i.e. player, slow, medium, or fast)
   ~Laser();
   
 private:
-  bool m_spaceship_laser;
+  LaserClass m_spaceship_laser;
 };
 
 ///////////////////////////////////////////////////////////////////////////
@@ -151,9 +158,7 @@ private:
 class SlowLaser : public Laser
 {
 public:
-  SlowLaser(StudentWorld* world, int start_x, int start_y, bool player_spaceship_laser, int image_id=IID_WATER_SPURT, Direction dir=down);
-  virtual unsigned int laser_speed(void) const;   // Returns the class of the laser (i.e. player laser, aliens slow, medium, or fast laser
-  bool get_projectile_viewpoint(void) const;      // Returns true if the laser belongs to the player spaceship (and false if it is an alien's)
+  SlowLaser(StudentWorld* world, int start_x, int start_y, Laser::LaserClass laser_class);
   ~SlowLaser();
   
 private:
@@ -166,9 +171,7 @@ private:
 class MediumLaser : public Laser
 {
 public:
-  MediumLaser(StudentWorld* world, int start_x, int start_y, bool player_spaceship_laser, int image_id=IID_WATER_SPURT, Direction dir=down);
-  virtual unsigned int laser_speed(void) const;   // Returns the class of the laser (i.e. player laser, aliens slow, medium, or fast laser
-  bool get_projectile_viewpoint(void) const;      // Returns true if the laser belongs to the player spaceship (and false if it is an alien's)
+  MediumLaser(StudentWorld* world, int start_x, int start_y, Laser::LaserClass laser_class);
   ~MediumLaser();
   
 private:
@@ -181,9 +184,7 @@ private:
 class FastLaser : public Laser
 {
 public:
-  FastLaser(StudentWorld* world, int start_x, int start_y, bool player_spaceship_laser, int image_id=IID_WATER_SPURT, Direction dir=down);
-  virtual unsigned int laser_speed(void) const;   // Returns the class of the laser (i.e. player laser, aliens slow, medium, or fast laser
-  bool get_projectile_viewpoint(void) const;      // Returns true if the laser belongs to the player spaceship (and false if it is an alien's)
+  FastLaser(StudentWorld* world, int start_x, int start_y, Laser::LaserClass laser_class);
   ~FastLaser();
   
 private:

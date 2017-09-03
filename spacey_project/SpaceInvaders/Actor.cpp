@@ -36,14 +36,14 @@ void Actor::set_dead(void) { m_alive = false; set_visible(false); }
 
 StudentWorld* Actor::world(void) { return m_world; }
 
-Actor::~Actor() {}
+Actor::~Actor() { set_visible(false); }
 
 ///////////////////////////////////////////////////////////////////////////
 /////////////////////-----------SPACESHIP--------------////////////////////
 ///////////////////////////////////////////////////////////////////////////
 
-Spaceship::Spaceship(StudentWorld* current_world, int start_x, int start_y)
-: Actor(current_world, IID_PLAYER, start_x, start_y, Direction::up, 1.0, 0) {}
+Spaceship::Spaceship(StudentWorld* world, int start_x, int start_y, int image_id, double image_size)
+: Actor(world, image_id, start_x, start_y, Direction::up, image_size, 0) {}
 
 void Spaceship::do_something(void)
 {
@@ -62,7 +62,7 @@ void Spaceship::do_something(void)
       // Player spaceship fires a laser
       case KEY_PRESS_SPACE:
         // If there is no player spaceship laser currently in the space field, shoot another
-        if (!space_world->get_spaceship_laser_count()) { new Laser(space_world, x, y + 1, true); }
+        if (!space_world->get_spaceship_laser_count()) { new Laser(space_world, x, y + 1, Laser::LaserClass::player_laser); }
         break;
       // Left
       case KEY_PRESS_LEFT:
@@ -81,8 +81,37 @@ void Spaceship::do_something(void)
 Spaceship::~Spaceship() {}
 
 ///////////////////////////////////////////////////////////////////////////
-///////////////////////-----------ALIEN--------------//////////////////////
+//////////////////-----------LARGE INVADER--------------///////////////////
 ///////////////////////////////////////////////////////////////////////////
+
+LargeInvader::LargeInvader(StudentWorld* world, int start_x, int start_y, int image_id, double image_size)
+: Spaceship(world, start_x, start_y, IID_BOULDER, 1.0) { world->add_actor(this); }
+
+void LargeInvader::do_something(void)
+{
+  
+  
+}
+
+LargeInvader::~LargeInvader() {}
+        
+///////////////////////////////////////////////////////////////////////////
+//////////////////-----------MEDIUM INVADER--------------//////////////////
+///////////////////////////////////////////////////////////////////////////
+
+MediumInvader::MediumInvader(StudentWorld* world, int start_x, int start_y)
+: LargeInvader(world, start_x, start_y, IID_BARREL, 1.0) { world->add_actor(this); }
+
+MediumInvader::~MediumInvader() {}
+
+///////////////////////////////////////////////////////////////////////////
+//////////////////-----------SMALL INVADER--------------///////////////////
+///////////////////////////////////////////////////////////////////////////
+
+SmallInvader::SmallInvader(StudentWorld* world, int start_x, int start_y)
+: LargeInvader(world, start_x, start_y, IID_PROTESTER, 1.0) { world->add_actor(this); }
+
+SmallInvader::~SmallInvader() {}
 
 ///////////////////////////////////////////////////////////////////////////
 ///////////////////-----------FLYINGSAUCER--------------///////////////////
@@ -96,8 +125,8 @@ Spaceship::~Spaceship() {}
 ///////////////////////-----------LASER--------------//////////////////////
 ///////////////////////////////////////////////////////////////////////////
 
-Laser::Laser(StudentWorld* world, int start_x, int start_y, bool player_spaceship_laser, int image_id, Direction dir)
-: Actor(world, image_id, start_x, start_y, dir, 0.50, 1), m_spaceship_laser(true)
+Laser::Laser(StudentWorld* world, int start_x, int start_y, Laser::LaserClass laser_class, int image_id, Direction dir)
+: Actor(world, image_id, start_x, start_y, dir, 0.50, 1), m_spaceship_laser(LaserClass::player_laser)
 {
   world->add_actor(this);
   world->play_sound(SOUND_LASER);
@@ -113,37 +142,56 @@ void Laser::do_something(void)
   
   StudentWorld* laser_world = world(); // Grab a pointer to the StudentWorld
   
-  // Player projectile
-  if (get_projectile_viewpoint())
+  switch (get_projectile_viewpoint())
   {
-    laser_world->check_collision(this, true, false); // Check if the laser collided with any aliens
-    if (!is_alive()) { return; } // Check the current status of the laser
-    move_to(x, y + 1); // If no collision, then update position
-    if (y >= VIEW_HEIGHT - 1) { set_dead(); }
-    if (!is_alive()) { return; } // Check the current status of the laser
-    laser_world->check_collision(this, true, false); // Check if the laser collided with any spaceships
-    if (!is_alive()) { return; } // Check the current status of the laser
-  }
-  // Enemy projectile
-  else
-  {
-    laser_world->check_collision(this, false, true); // Check if the laser collided with any spaceships
-    if (!is_alive()) { return; } // Check the current status of the laser
-    move_to(x, y - 1); // If no collision, then update position
-    if (y <= 0) { set_dead(); }
-    if (!is_alive()) { return; } // Check the current status of the laser
-    laser_world->check_collision(this, false, true); // Check if the laser collided with any spaceships
-    if (!is_alive()) { return; } // Check the current status of the laser
+    case LaserClass::player_laser:
+      laser_world->check_collision(this, true, false); // Check if the laser collided with any aliens
+      if (!is_alive()) { return; } // Check the current status of the laser
+      move_to(x, y + 1); // If no collision, then update position
+      if (y >= VIEW_HEIGHT - 1) { set_dead(); }
+      if (!is_alive()) { return; } // Check the current status of the laser
+      laser_world->check_collision(this, true, false); // Check if the laser collided with any spaceships
+      if (!is_alive()) { return; } // Check the current status of the laser
+      break;
+    case LaserClass::slow_laser:
+      laser_world->check_collision(this, true, false); // Check if the laser hit the player spaceship (or barrier)
+      if (!is_alive()) { return; } // Check the current status of the laser
+      move_to(x, y - 1); // If no collision, then update position
+      if (y <= 0) { set_dead(); }
+      if (!is_alive()) { return; } // Check the current status of the laser
+      laser_world->check_collision(this, true, false); // Check if the laser hit the player spaceship (or barrier)
+      if (!is_alive()) { return; } // Check the current status of the laser
+      break;
+    case LaserClass::medium_laser:
+      laser_world->check_collision(this, true, false); // Check if the laser hit the player spaceship (or barrier)
+      if (!is_alive()) { return; } // Check the current status of the laser
+      move_to(x, y - 2); // If no collision, then update position
+      if (y <= 0) { set_dead(); }
+      if (!is_alive()) { return; } // Check the current status of the laser
+      laser_world->check_collision(this, true, false); // Check if the laser hit the player spaceship (or barrier)
+      if (!is_alive()) { return; } // Check the current status of the laser
+      break;
+    case LaserClass::fast_laser:
+      laser_world->check_collision(this, true, false); // Check if the laser hit the player spaceship (or barrier)
+      if (!is_alive()) { return; } // Check the current status of the laser
+      move_to(x, y - 3); // If no collision, then update position
+      if (y <= 0) { set_dead(); }
+      if (!is_alive()) { return; } // Check the current status of the laser
+      laser_world->check_collision(this, true, false); // Check if the laser hit the player spaceship (or barrier)
+      if (!is_alive()) { return; } // Check the current status of the laser
+      break;
+    default:
+      break;
   }
 }
 
-bool Laser::get_projectile_viewpoint(void) const { return m_spaceship_laser == true; }
+Laser::LaserClass Laser::get_projectile_viewpoint(void) const { return m_spaceship_laser; }
 
-unsigned int Laser::laser_speed(void) const { return 0; }
+void Laser::set_laser_speed(Laser::LaserClass value) { m_spaceship_laser = value; }
 
 Laser::~Laser()
 {
-  if (get_projectile_viewpoint()) { world()->update_spaceship_laser_count(false); }
+  if (get_projectile_viewpoint() == LaserClass::player_laser) { world()->update_spaceship_laser_count(false); }
   else { world()->update_alien_laser_count(-1); }
 }
 
@@ -151,10 +199,8 @@ Laser::~Laser()
 ////////////////////-----------SLOW LASER--------------////////////////////
 ///////////////////////////////////////////////////////////////////////////
 
-SlowLaser::SlowLaser(StudentWorld* world, int start_x, int start_y, bool player_spaceship_laser, int image_id, Direction dir)
-: Laser(world, start_x, start_y, false, image_id, dir) {}
-
-unsigned int SlowLaser::laser_speed(void) const { return 1; }
+SlowLaser::SlowLaser(StudentWorld* world, int start_x, int start_y, Laser::LaserClass laser_class)
+: Laser(world, start_x, start_y, laser_class, IID_WATER_SPURT, Direction::down) { set_laser_speed(LaserClass::slow_laser); }
 
 SlowLaser::~SlowLaser() {}
 
@@ -162,10 +208,8 @@ SlowLaser::~SlowLaser() {}
 ///////////////////-----------MEDIUM LASER--------------///////////////////
 ///////////////////////////////////////////////////////////////////////////
 
-MediumLaser::MediumLaser(StudentWorld* world, int start_x, int start_y, bool player_spaceship_laser, int image_id, Direction dir)
-: Laser(world, start_x, start_y, false, image_id, dir) {}
-
-unsigned int MediumLaser::laser_speed(void) const { return 2; }
+MediumLaser::MediumLaser(StudentWorld* world, int start_x, int start_y, Laser::LaserClass laser_class)
+: Laser(world, start_x, start_y, laser_class, IID_WATER_SPURT, Direction::down) { set_laser_speed(LaserClass::medium_laser); }
 
 MediumLaser::~MediumLaser() {}
 
@@ -173,10 +217,8 @@ MediumLaser::~MediumLaser() {}
 ////////////////////-----------FAST LASER--------------////////////////////
 ///////////////////////////////////////////////////////////////////////////
 
-FastLaser::FastLaser(StudentWorld* world, int start_x, int start_y, bool player_spaceship_laser, int image_id, Direction dir)
-: Laser(world, start_x, start_y, false, image_id, dir) {}
-
-unsigned int FastLaser::laser_speed(void) const { return 3; }
+FastLaser::FastLaser(StudentWorld* world, int start_x, int start_y, Laser::LaserClass laser_class)
+: Laser(world, start_x, start_y, laser_class, IID_WATER_SPURT, Direction::down) { set_laser_speed(LaserClass::fast_laser); }
 
 FastLaser::~FastLaser() {}
 
