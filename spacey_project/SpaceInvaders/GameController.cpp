@@ -110,7 +110,7 @@ void GameController::init_drawers_and_sounds(void)
     { IID_FAST_LASER,       0, "fast_laser.tga" },
     { IID_FAST_LASER,       1, "fast_laser2.tga" },
     { IID_PLAYER_KILLED,    0, "player_explosion.tga" },
-//    { IID_PLAYER_KILLED,    1, "explosion2.tga" },
+    { IID_PLAYER_KILLED,    1, "player_explosion2.tga" },
     { IID_INVADER_KILLED,   0, "invaderkilled.tga" },
     { IID_BORDER,           0, "border.tga"},
   };

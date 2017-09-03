@@ -56,13 +56,16 @@ Border::~Border() {}
 ////////////////-----------INVADER EXPLOSION--------------/////////////////
 ///////////////////////////////////////////////////////////////////////////
 
-InvaderExplosion::InvaderExplosion(StudentWorld* world, int start_x, int start_y, int image_id)
-: Actor(world, image_id, start_x, start_y, Direction::right, 1.0, 0), m_display(0) { world->add_actor(this); }
+InvaderExplosion::InvaderExplosion(StudentWorld* world, int start_x, int start_y, int image_id, int image_duration)
+: Actor(world, image_id, start_x, start_y, Direction::right, 1.0, 0), m_display(image_duration) { world->add_actor(this); }
 
 void InvaderExplosion::do_something(void)
 {
-  if (m_display == 6) { set_dead(); return; }
-  m_display++;
+  if (m_display <= 0) { set_dead(); return; } // The explosion image should only be displayed for a given duration
+  
+  move_to(get_x(), get_y()); // Move image in place to generate the two sprite images
+  
+  m_display--; // Decrement the count to disappear
 }
 
 InvaderExplosion::~InvaderExplosion() {}
@@ -71,8 +74,8 @@ InvaderExplosion::~InvaderExplosion() {}
 /////////////////-----------PLAYER EXPLOSION--------------/////////////////
 ///////////////////////////////////////////////////////////////////////////
 
-PlayerExplosion::PlayerExplosion(StudentWorld* world, int start_x, int start_y)
-: InvaderExplosion(world, start_x, start_y, IID_PLAYER_KILLED) {}
+PlayerExplosion::PlayerExplosion(StudentWorld* world, int start_x, int start_y, int image_duration)
+: InvaderExplosion(world, start_x, start_y, IID_PLAYER_KILLED, image_duration) {}
 
 PlayerExplosion::~PlayerExplosion() {}
 

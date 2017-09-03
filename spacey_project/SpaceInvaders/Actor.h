@@ -67,7 +67,7 @@ private:
 class InvaderExplosion : public Actor
 {
 public:
-  InvaderExplosion(StudentWorld* world, int start_x, int start_y, int image_id=IID_INVADER_KILLED);
+  InvaderExplosion(StudentWorld* world, int start_x, int start_y, int image_id=IID_INVADER_KILLED, int image_duration=6);
   virtual void do_something(void);
   virtual ~InvaderExplosion();
   
@@ -83,7 +83,7 @@ private:
 class PlayerExplosion : public InvaderExplosion
 {
 public:
-  PlayerExplosion(StudentWorld* world, int start_x, int start_y);
+  PlayerExplosion(StudentWorld* world, int start_x, int start_y, int image_duration=20);
   virtual ~PlayerExplosion();
   
 private:
