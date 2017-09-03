@@ -72,14 +72,15 @@ public:
   
 private:
   Spaceship*          m_spaceship;                  // Player Spaceship
-  Border*             m_border;                     // Border around the screen
+  Border*             m_border[VIEW_WIDTH][1];      // Border around the screen
   std::vector<Actor*> m_actors;                     // All actor objects (i.e. space invaders, flying saucer, lasers, perhaps barriers too)
   bool                m_spaceship_laser_count;      // Variable to keep track if the player currently has a laser in the space field
   bool                m_flying_saucer_count;        // Variable to keep track if there is currently a flying saucer (UFO) in the space field
   int                 m_invader_laser_count;        // Variable to keep track of all of the invaders' lasers in the space field (as there is a cap)
   int                 m_current_invader_count;      // Variable to keep track of how many aliens have been killed by the player
   /* Private Functions */
-  void init_border(void);
+  void init_border(void);                           // Initialize the border
+  void deinit_border(void);                         // Deinitialize the border
 };
 
 #endif // STUDENTWORLD_H_

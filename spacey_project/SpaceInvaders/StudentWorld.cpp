@@ -46,6 +46,8 @@ int StudentWorld::init()
 {
   m_spaceship = new Spaceship(this); // Initialize player spaceship
   
+  init_border(); // Initialize the border
+  
   add_initial_actors(); // Add initial actors to the current level (i.e. the invaders and barriers)
   
   set_spaceship_laser_count(); // Set the current player laser count in the space field to 0
@@ -138,6 +140,8 @@ void StudentWorld::clean_up()
   }
   
   delete m_spaceship; // Remove player spaceship
+  
+  deinit_border(); // Remove border
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -313,11 +317,17 @@ void StudentWorld::check_collision(Actor* actor, bool is_player, bool is_invader
   // Check if invader laser hits the player spaceship /// TODO: barrier too
   if (is_invader)
   {
-    // Alien projectile hit player spaceship
+    // Invader projectile hit player spaceship
     if (actor->get_x() >= m_spaceship->get_x() - 2 && actor->get_x() <= m_spaceship->get_x() + 2 && actor->get_y() == m_spaceship->get_y())
     {
       m_spaceship->set_dead();
       play_sound(SOUND_PLAYER_KILLED);
+    }
+    // Invader projectile hit the bottom border
+    if (actor->get_y() == BORDER_HEIGHT)
+    {
+      play_sound(SOUND_PLAYER_KILLED);
+      new InvaderExplosion(this, actor->get_x(), actor->get_y());
     }
   }
 }
@@ -343,4 +353,24 @@ int StudentWorld::rand_int(int min, int max) const
   std::mt19937 generator(rd());
   std::uniform_int_distribution<int> distro(min, max);
   return distro(generator);
+}
+
+///////////////////////////////////////////////////////////////////////////
+////////-----------STUDENTWORLD PRIVATE FUNCTIONS--------------////////////
+///////////////////////////////////////////////////////////////////////////
+
+void StudentWorld::init_border(void)
+{
+  for (int i = 0; i < VIEW_WIDTH - 1; i++)
+  {
+    for (int j = 0; j < 1; j++)
+    {
+      m_border[i][j] = new Border(this, i, j + 8);
+    }
+  }
+}
+
+void StudentWorld::deinit_border(void)
+{
+  
 }

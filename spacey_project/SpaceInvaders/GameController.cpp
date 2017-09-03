@@ -109,7 +109,7 @@ void GameController::init_drawers_and_sounds(void)
 //    { IID_PLAYER_KILLED,    0, "explosion1.tga" },
 //    { IID_PLAYER_KILLED,    1, "explosion2.tga" },
     { IID_INVADER_KILLED,   0, "invaderkilled.tga" },
-    { IID_BARRIER,          0, "border.tga"},
+    { IID_BORDER,           0, "border.tga"},
   };
 
 	SoundMapType::value_type sounds[] = {    
