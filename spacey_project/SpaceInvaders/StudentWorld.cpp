@@ -176,35 +176,42 @@ void StudentWorld::add_initial_actors(void)
 {
   /// TODO: add barriers
   
-  /// TODO: the rows of aliens start lower and lower as the rounds go on (and it resets at round 10 to original height)
-  // Adding Space Invaders (1: 11, 2: 10, 3: 9, 4: 8, 5: 7, 6: 6, 7: 4, 8: 3, 9: 2, 10: 11, ...)
-    // Add Large Invaders
+  // Add Large Invaders
+  static int invader_row_height = 1;
+  if (get_level() >= 10)
+  {
+    invader_row_height = (get_level() % 10) + 1;
+  }
+  else
+  {
+    invader_row_height = get_level();
+  }
   int j = 0;
   for (int i = 5; (j++ < 11); i += 5)
   {
-    new LargeInvader(this, i, 39, 1);
+    new LargeInvader(this, i, 39 - ((invader_row_height - 1) * 3), 1);
   }
   j = 0;
   for (int i = 5; (j++ < 11); i += 5)
   {
-    new LargeInvader(this, i, 44, 2);
+    new LargeInvader(this, i, 44 - ((invader_row_height - 1) * 3), 2);
   }
     // Add Medium Invaders
   j = 0;
   for (int i = 5; (j++ < 11); i += 5)
   {
-    new MediumInvader(this, i, 49, 3);
+    new MediumInvader(this, i, 49 - ((invader_row_height - 1) * 3), 3);
   }
   j = 0;
   for (int i = 5; (j++ < 11); i += 5)
   {
-    new MediumInvader(this, i, 54, 4);
+    new MediumInvader(this, i, 54 - ((invader_row_height - 1) * 3), 4);
   }
     // Add Small Invaders
   j = 0;
   for (int i = 5; (j++ < 11); i += 5)
   {
-    new SmallInvader(this, i, 59, 5);
+    new SmallInvader(this, i, 59 - ((invader_row_height - 1) * 3), 5);
   }
 }
 
