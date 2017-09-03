@@ -5,13 +5,6 @@
 ///////////////////////-----------IMAGES--------------/////////////////////
 ///////////////////////////////////////////////////////////////////////////
 
-const int IID_WATER_SPURT	   = 15;
-const int IID_BOULDER		   = 16;        // (Large Invader)
-const int IID_BARREL		   = 17;        // (Medium Invader)
-const int IID_DIRT			   = 18;
-const int IID_SONAR			   = 20;
-const int IID_WATER_POOL	   = 21;
-
 const int IID_SPACESHIP        = 0;
 const int IID_LARGE_INVADER    = 1;
 const int IID_MEDIUM_INVADER   = 2;
@@ -24,26 +17,24 @@ const int IID_MEDIUM_LASER     = 8;
 const int IID_FAST_LASER       = 9;
 const int IID_PLAYER_KILLED    = 10;
 const int IID_INVADER_KILLED   = 11;
+const int IID_BORDER           = 12;
 
 ///////////////////////////////////////////////////////////////////////////
 //////////////////////----------- SOUNDS--------------/////////////////////
 ///////////////////////////////////////////////////////////////////////////
 
-const int SOUND_THEME					= 9;
-const int SOUND_DIG						= 15;
-const int SOUND_FINISHED_LEVEL			= 16;
-
-const int SOUND_ALIEN_MOVE_1            = 0;
-const int SOUND_ALIEN_MOVE_2            = 1;
-const int SOUND_ALIEN_MOVE_3            = 2;
-const int SOUND_ALIEN_MOVE_4            = 3;
-const int SOUND_PLAYER_KILLED           = 4;
-const int SOUND_ALIEN_KILLED            = 5;
-const int SOUND_LASER                   = 6;
-const int SOUND_SAUCER_MOVE_1           = 7;
-const int SOUND_SAUCER_MOVE_2           = 8;
-
 const int SOUND_NONE				   = -1;
+const int SOUND_THEME					= 0;
+const int SOUND_ALIEN_MOVE_1            = 1;
+const int SOUND_ALIEN_MOVE_2            = 2;
+const int SOUND_ALIEN_MOVE_3            = 3;
+const int SOUND_ALIEN_MOVE_4            = 4;
+const int SOUND_PLAYER_KILLED           = 5;
+const int SOUND_ALIEN_KILLED            = 6;
+const int SOUND_LASER                   = 7;
+const int SOUND_SAUCER_MOVE_1           = 8;
+const int SOUND_SAUCER_MOVE_2           = 9;
+const int SOUND_FINISHED_LEVEL			= 10;
 
 ///////////////////////////////////////////////////////////////////////////
 ///////////////////----------- PLAYER INPUT--------------//////////////////

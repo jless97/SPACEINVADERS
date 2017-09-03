@@ -109,16 +109,10 @@ void GameController::init_drawers_and_sounds(void)
 //    { IID_PLAYER_KILLED,    0, "explosion1.tga" },
 //    { IID_PLAYER_KILLED,    1, "explosion2.tga" },
     { IID_INVADER_KILLED,   0, "invaderkilled.tga" },
-
-		{ IID_WATER_SPURT, 0, "water1.tga" },
-		{ IID_WATER_SPURT, 1, "water2.tga" },
-		{ IID_WATER_SPURT, 2, "water3.tga" },
-		{ IID_DIRT, 0, "dirt.tga" },
+    { IID_BARRIER,          0, "border.tga"},
   };
 
-	SoundMapType::value_type sounds[] = {
-    make_pair(SOUND_DIG, "digging.wav"),
-    
+	SoundMapType::value_type sounds[] = {    
 		make_pair(SOUND_THEME					, "theme.wav"),
     make_pair(SOUND_ALIEN_MOVE_1,   "fastinvader1.wav"),
     make_pair(SOUND_ALIEN_MOVE_2,   "fastinvader2.wav"),
