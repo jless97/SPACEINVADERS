@@ -126,15 +126,15 @@ Spaceship::~Spaceship() {}
 ///////////////////////////////////////////////////////////////////////////
 
 LargeInvader::LargeInvader(StudentWorld* world, int start_x, int start_y, int row, int image_id, double image_size, int dir)
-: Spaceship(world, start_x, start_y, image_id, image_size), m_direction(dir), m_next_direction(0), m_can_move(0), m_row_number(row)
+: Spaceship(world, start_x, start_y, image_id, image_size), m_direction(dir), m_next_direction(0), m_ticks(0), m_max_ticks(25), m_row_number(row)
 { world->add_actor(this); }
 
 void LargeInvader::do_something(void)
 {  
   if (!is_alive()) { return; } // Check the current status of the invader object
   
-  if (get_can_move_status() < 20) { update_can_move_status(1); return; }
-  else { set_can_move_status(0); }
+  if (get_ticks() < get_max_ticks()) { update_ticks(1); return; }
+  else { set_ticks(0); }
 
   StudentWorld* invader_world = world(); // Grab a pointer to the StudentWorld
 
@@ -194,21 +194,33 @@ void LargeInvader::do_something(void)
   }
 }
 
-void LargeInvader::update_can_move_status(int how_much) { m_can_move += how_much; }
+///////////////////////////////////////////////////////////////////////////
+//////////////////-----------MUTATOR FUNCTIONS-------------////////////////
+///////////////////////////////////////////////////////////////////////////
+
+void LargeInvader::update_ticks(int how_much) { if (this == nullptr) { return; }m_ticks += how_much; }
   
 void LargeInvader::set_movement_direction(int dir) { if (this == nullptr) { return; } m_direction = dir; }
 
 void LargeInvader::set_next_movement_direction(int dir) { if (this == nullptr) { return; } m_next_direction = dir; }
 
-void LargeInvader::set_can_move_status(int value) { if (this == nullptr) { return; } m_can_move = value; }
+void LargeInvader::set_ticks(int value) { if (this == nullptr) { return; } m_ticks = value; }
+
+void LargeInvader::set_max_ticks(int value) { if (this == nullptr) { return; } m_max_ticks = value; }
 
 void LargeInvader::set_row_number(int value) { if (this == nullptr) { return; } m_row_number = value; }
+
+///////////////////////////////////////////////////////////////////////////
+/////////////////-----------ACCESSOR FUNCTIONS-------------////////////////
+///////////////////////////////////////////////////////////////////////////
 
 int LargeInvader::get_movement_direction(void) { if (this == nullptr) { return -1; } return m_direction; }
 
 int LargeInvader::get_next_movement_direction(void) { if (this == nullptr) { return -1; } return m_next_direction; }
 
-int LargeInvader::get_can_move_status(void) { if (this == nullptr) { return -1; } return m_can_move; }
+int LargeInvader::get_ticks(void) { if (this == nullptr) { return -1; } return m_ticks; }
+
+int LargeInvader::get_max_ticks(void) { if (this == nullptr) { return -1; } return m_max_ticks; }
 
 int LargeInvader::get_row_number(void) { if (this == nullptr) { return -1; } return m_row_number; }
 
@@ -237,7 +249,7 @@ SmallInvader::~SmallInvader() {}
 ///////////////////////////////////////////////////////////////////////////
 
 FlyingSaucer::FlyingSaucer(StudentWorld* world, int start_x, int start_y)
-: Actor(world, IID_FLYING_SAUCER, start_x, start_y, Direction::right, 1.0, 0) { world->add_actor(this); world->update_flying_saucer_count(true); }
+: LargeInvader(world, start_x, start_y, 0, IID_FLYING_SAUCER, 1.0) { world->update_flying_saucer_count(true); }
 
 void FlyingSaucer::do_something(void)
 {
@@ -250,7 +262,7 @@ void FlyingSaucer::do_something(void)
   if (x <= -5) { set_dead(); }
 }
 
-FlyingSaucer::~FlyingSaucer() { world()->update_flying_saucer_count(false); }
+FlyingSaucer::~FlyingSaucer() { world()->update_current_invader_count(1); world()->update_flying_saucer_count(false); }
 
 ///////////////////////////////////////////////////////////////////////////
 //////////////////////-----------BARRIER--------------/////////////////////
@@ -282,7 +294,7 @@ void Laser::do_something(void)
     case LaserClass::player_laser:
       laser_world->check_collision(this, true, false); // Check if the laser collided with any aliens
       if (!is_alive()) { return; } // Check the current status of the laser
-      move_to(x, y + 1); // If no collision, then update position
+      move_to(x, y + 2); // If no collision, then update position
       if (y >= VIEW_HEIGHT - 1) { set_dead(); }
       if (!is_alive()) { return; } // Check the current status of the laser
       laser_world->check_collision(this, true, false); // Check if the laser collided with any spaceships

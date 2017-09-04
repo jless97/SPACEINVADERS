@@ -52,19 +52,23 @@ public:
   void update_flying_saucer_count(bool how_much);   // Updates the status of the flying saucer in the space field
   void update_invader_laser_count(int how_much);    // Updates the current number of enemy lasers in the space field
   void update_current_invader_count(int how_much);  // Update the number of invaders left to destroy before advancing to the next level
+  void update_invader_speed(int how_much);          // Update the speed of the invaders
   void set_spaceship_laser_count(void);             // Sets the status of the player's laser in the space field
   void set_flying_saucer_count(void);               // Sets the status of the flying saucer in the space field
   void set_invader_laser_count(void);               // Sets the current number of enemy lasers in the space field
   void set_current_invader_count(void);             // Resets the number of invaders to destroy per round (to 55)
+  void set_invader_speed(void);                     // Sets the speed of the invaders
   /* Accessor Functions */
   bool get_spaceship_laser_count(void) const;       // Returns true if there is a player laser currently in the space field
   bool get_flying_saucer_count(void) const;         // Returns true if there is currently a flying saucer in the space field
   int get_invader_laser_count(void) const;          // Returns the number of lasers currently in the space field
   int get_current_invader_count(void) const;        // Returns the number of invaders left to destroy before completing the current level
+  int get_invader_speed(void) const;                // Returns the speed of the invaders for a given round
   /* Laser Handling Functions */
   void check_collision(Actor* actor, bool is_player=true, bool is_invader=false); // Checks if there were any collisions between actor objects
   bool is_invader_below(LargeInvader* invader);     // Returns true if there is an invader in the same column, that is a row beneath the invader
   /* Invader Movement Functions */
+  void reset_original_invader_speed(void);          // Resets each invader to their original movement speed upon the start of each new round
   /* Math Helper Functions */
   int max(int x, int y) ;                           // Returns the max of two numbers
   int min(int x, int y) ;                           // Returns the min of two numbers
@@ -79,6 +83,8 @@ private:
   bool                m_flying_saucer_count;        // Variable to keep track if there is currently a flying saucer (UFO) in the space field
   int                 m_invader_laser_count;        // Variable to keep track of all of the invaders' lasers in the space field (as there is a cap)
   int                 m_current_invader_count;      // Variable to keep track of how many aliens have been killed by the player
+  int                 m_invader_speed;              // Variable that controls the speed of the invaders for a given round
+  int                 m_multiple;
   /* Private Functions */
   void init_border(void);                           // Initialize the border
   void deinit_border(void);                         // Deinitialize the border

@@ -133,7 +133,7 @@ void GameController::init_drawers_and_sounds(void)
 		string path = m_gw->asset_directory();
     if (!path.empty()) { path += '/'; }
 		const SpriteInfo& d = drawers[k];
-    if (!m_sprite_manager.load_sprite(path + d.tga_filename, d.image_id, d.frame_num)) { cout << "ERROR2" << endl; exit(0); }
+    if (!m_sprite_manager.load_sprite(path + d.tga_filename, d.image_id, d.frame_num)) { cout << "ERROR" << endl; exit(0); }
 	}
   for (int k = 0; k < sizeof(sounds)/sizeof(sounds[0]); k++) { m_sound_map[sounds[k].first] = sounds[k].second; }
 }
@@ -211,7 +211,7 @@ void GameController::run(int argc, char* argv[], GameWorld* gw, string window_ti
 	m_gw = gw;
 	set_game_state(welcome);
 	m_last_key_hit = INVALID_KEY;
-	m_singleStep = false;
+	m_single_step = false;
 	m_cur_intra_frame_tick = 0;
 	m_player_won = false;
 
@@ -255,8 +255,8 @@ void GameController::keyboard_event(unsigned char key, int /* x */, int /* y */)
 		case 'w': case '8': m_last_key_hit = KEY_PRESS_UP;    break;
 		case 's': case '2': m_last_key_hit = KEY_PRESS_DOWN;	break;
 		case 't':           m_last_key_hit = KEY_PRESS_TAB;   break;
-		case 'f':           m_singleStep = true;              break;
-		case 'r':           m_singleStep = false;             break;
+		case 'f':           m_single_step = true;              break;
+		case 'r':           m_single_step = false;             break;
 		case 'q': case 'Q': set_game_state(quit);             break;
 		default:            m_last_key_hit = key;             break;
 	}
@@ -300,17 +300,9 @@ void GameController::do_something()
 			set_game_state(prompt);
 			m_next_state_after_prompt = init;
 			break;
-		case contgame:
-			m_main_message = "You lost a life!";
-			m_second_message = "Press Enter to continue playing...";
-			set_game_state(prompt);
-			m_next_state_after_prompt = clean_up;
-			break;
 		case finishedlevel:
-			m_main_message = "Woot! You finished the level!";
-			m_second_message = "Press Enter to continue playing...";
-			set_game_state(prompt);
-			m_next_state_after_prompt = clean_up;
+      m_gw->clean_up();
+      set_game_state(init);
 			break;
 		case makemove:
 			m_cur_intra_frame_tick = ANIMATION_POSITIONS_PER_TICK;
@@ -319,13 +311,12 @@ void GameController::do_something()
 				int status = m_gw->move();
 				if (status == GWSTATUS_PLAYER_DIED)
 				{
-					  // animate one last frame so the player can see what happened
-					m_next_state_after_animate = (m_gw->is_game_over() ? gameover : contgame);
+          // animate one last frame so the player can see what happened
+          m_next_state_after_animate = gameover;
 				}
 				else if (status == GWSTATUS_FINISHED_LEVEL)
 				{
 					m_gw->advance_to_next_level();
-					  // animate one last frame so the player can see what happened
 					m_next_state_after_animate = finishedlevel;
 				}
 			}
@@ -340,7 +331,7 @@ void GameController::do_something()
 				else
 				{
 					int key;
-					if (!m_singleStep  ||  get_last_key(key))
+					if (!m_single_step  ||  get_last_key(key))
 						set_game_state(makemove);
 				}
 			}

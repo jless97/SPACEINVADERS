@@ -28,7 +28,7 @@
 //////////////////////-----------GLOBALS--------------/////////////////////
 ///////////////////////////////////////////////////////////////////////////
 
-enum GameControllerState { welcome, contgame, finishedlevel, init, clean_up, makemove, animate, gameover, prompt, quit, not_applicable };
+enum GameControllerState { welcome, finishedlevel, init, clean_up, makemove, animate, gameover, prompt, quit, not_applicable };
 
 const int INVALID_KEY = 0;
 
@@ -60,7 +60,7 @@ private:
 	GameControllerState	m_next_state_after_prompt;
 	GameControllerState	m_next_state_after_animate;
 	int			            m_last_key_hit;
-	bool		            m_singleStep;
+	bool		            m_single_step;
 	std::string         m_game_stat_text;
 	std::string         m_main_message;
 	std::string         m_second_message;

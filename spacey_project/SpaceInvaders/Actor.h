@@ -115,22 +115,25 @@ public:
   LargeInvader(StudentWorld* world, int start_x, int start_y, int row, int image_id=IID_LARGE_INVADER, double image_size=1.0, int dir=1);
   virtual void do_something(void);
   /* Mutator Functions */
-  void update_can_move_status(int how_much);      // Updates the status of when the invaders can move again
-  void set_movement_direction(int dir);           // Update the current direction the invaders are moving in
-  void set_next_movement_direction(int dir);      // Update the next direction to move in (used after moving down)
-  void set_can_move_status(int value);            // Sets the status of whether the invaders can move this tick
-  void set_row_number(int value);                 // Sets the row number that the invader belongs to
+  void update_ticks(int how_much);            // Updates the status of when the invaders can move again
+  void set_movement_direction(int dir);       // Update the current direction the invaders are moving in
+  void set_next_movement_direction(int dir);  // Update the next direction to move in (used after moving down)
+  void set_ticks(int value);                  // Sets the status of whether the invaders can move this tick
+  void set_max_ticks(int value);              // Sets the max ticks the invader has to wait before they can do something
+  void set_row_number(int value);             // Sets the row number that the invader belongs to
   /* Accessor Functions */
-  int get_movement_direction(void);               // Returns the current direction that the invaders are moving in
-  int get_next_movement_direction(void);          // Returns the next direction that the invader will take (used after moving down)
-  int get_can_move_status(void);                  // Returns the status of when the invaders get to move
-  int get_row_number(void);                       // Returns the row number that the invader belongs to
+  int get_movement_direction(void);           // Returns the current direction that the invaders are moving in
+  int get_next_movement_direction(void);      // Returns the next direction that the invader will take (used after moving down)
+  int get_ticks(void);                        // Returns the status of when the invaders get to move
+  int get_max_ticks(void);                    // Returns the total ticks an invader has to wait for a given round before they can do something
+  int get_row_number(void);                   // Returns the row number that the invader belongs to
   virtual ~LargeInvader();
   
 private:
   int       m_direction;      // Direction the invaders are moving in (0: left, 1: right, 2: down)
   int       m_next_direction; // Variable that handles when the invaders will move down a row
-  int       m_can_move;       // To deal with the movement speed of the invaders // TODO FIX
+  int       m_ticks;          // Counts the non-resting ticks before the invader can do something
+  int       m_max_ticks;      // The max ticks for this round to determine the movement speed of the invader
   int       m_row_number;     // The row number that the invader belongs to (i.e. 1st, 2nd, 3rd, 4th, or 5th)
 };
 
@@ -167,7 +170,7 @@ private:
 ///////////////////////////////////////////////////////////////////////////
 
 // IID_FLYING_SAUCER
-class FlyingSaucer : public Actor
+class FlyingSaucer : public LargeInvader
 {
 public:
   FlyingSaucer(StudentWorld* world, int start_x, int start_y);

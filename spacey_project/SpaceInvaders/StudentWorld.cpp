@@ -34,7 +34,8 @@ GameWorld* createStudentWorld(string asset_dir) { return new StudentWorld(asset_
 ///////////////////////////////////////////////////////////////////////////
 
 StudentWorld::StudentWorld(std::string asset_dir)
-:GameWorld(asset_dir), m_spaceship_laser_count(false), m_flying_saucer_count(0), m_invader_laser_count(0), m_current_invader_count(55) {}
+:GameWorld(asset_dir), m_spaceship_laser_count(false), m_flying_saucer_count(0), m_invader_laser_count(0),
+ m_current_invader_count(55), m_invader_speed(0), m_multiple(1) {}
 
 StudentWorld::~StudentWorld() { clean_up(); }
 
@@ -47,8 +48,10 @@ int StudentWorld::init()
   m_spaceship = new Spaceship(this); // Initialize player spaceship
   
   init_border(); // Initialize the border
-  
+
   add_initial_actors(); // Add initial actors to the current level (i.e. the invaders and barriers)
+  
+  reset_original_invader_speed(); // Reset the movement speed of the invaders at the start of each new round
   
   set_spaceship_laser_count(); // Set the current player laser count in the space field to 0
   
@@ -57,6 +60,10 @@ int StudentWorld::init()
   set_invader_laser_count(); // Set the current invaders' laser count in the space field to 0
   
   set_current_invader_count(); // Resets the number of invaders to destroy per round to 55
+  
+  set_invader_speed(); // Sets the invader speed back to the default
+  
+  m_multiple = 1; // Helps with handling invader speed changing
   
   return GWSTATUS_CONTINUE_GAME;
 }
@@ -77,7 +84,7 @@ int StudentWorld::move()
   static int play_invader_sound = 0;
   for (int i = 0; i < m_actors.size(); i++)
   {
-    if (dynamic_cast<LargeInvader*>(m_actors[i])->get_can_move_status() == 0)
+    if (dynamic_cast<LargeInvader*>(m_actors[i])->get_ticks() == 0)
     {
       switch (play_invader_sound)
       {
@@ -95,7 +102,7 @@ int StudentWorld::move()
   // After letting all actors make a move, check to see if invaders should move down on the next turn
   static int counter = 0;
   bool move_down = false;
-  if (counter > 100)
+  if (counter > 50)
   {
     for (int i = 0; i < m_actors.size(); i++)
     {
@@ -127,6 +134,31 @@ int StudentWorld::move()
     }
   }
   
+  // Adjust the speed of the invaders for each round
+  if (get_invader_speed() >= (3 * m_multiple))
+  {
+    cout << "ENTER: " << get_invader_speed() << endl;
+    for (int i = 0; i < m_actors.size(); i++)
+    {
+      if (m_actors[i]->get_id() == IID_LARGE_INVADER || m_actors[i]->get_id() == IID_MEDIUM_INVADER || m_actors[i]->get_id() == IID_SMALL_INVADER)
+      {
+        dynamic_cast<LargeInvader*>(m_actors[i])->set_max_ticks(dynamic_cast<LargeInvader*>(m_actors[i])->get_max_ticks() - 1);
+      }
+    }
+    m_multiple++;
+  }
+  // If there is one invader left, increase its speed to some max (TODO: it moves faster in one direction than the other)
+  if (get_current_invader_count() == 1)
+  {
+    for (int i = 0; i < m_actors.size(); i++)
+    {
+      if (m_actors[i]->get_id() == IID_LARGE_INVADER || m_actors[i]->get_id() == IID_MEDIUM_INVADER || m_actors[i]->get_id() == IID_SMALL_INVADER)
+      {
+        dynamic_cast<LargeInvader*>(m_actors[i])->set_max_ticks(0);
+      }
+    }
+  }
+  
   // If the player died during this tick, decrement lives, and if out of lives (GameWorld goes to game over screen)
   static int wait_to_spawn = 0;
   if (!m_spaceship->is_alive())
@@ -136,7 +168,7 @@ int StudentWorld::move()
   }
   
   // If the player destroyed all 55 aliens in a round, then advance to the next round
-  if (get_current_invader_count() <= 54) { return GWSTATUS_FINISHED_LEVEL; }
+  if (get_current_invader_count() <= 0) { return GWSTATUS_FINISHED_LEVEL; }
   
   add_additional_actors(); // Add additional actors (i.e. flying saucer)
   
@@ -260,6 +292,8 @@ void StudentWorld::update_invader_laser_count(int how_much) { m_invader_laser_co
 
 void StudentWorld::update_current_invader_count(int how_much) { m_current_invader_count += how_much; }
 
+void StudentWorld::update_invader_speed(int how_much) { m_invader_speed += how_much; }
+
 void StudentWorld::set_spaceship_laser_count(void) { m_spaceship_laser_count = false; }
 
 void StudentWorld::set_flying_saucer_count(void) { m_flying_saucer_count = false; }
@@ -267,6 +301,8 @@ void StudentWorld::set_flying_saucer_count(void) { m_flying_saucer_count = false
 void StudentWorld::set_invader_laser_count(void) { m_invader_laser_count = 0; }
 
 void StudentWorld::set_current_invader_count(void) { m_current_invader_count = 55; }
+
+void StudentWorld::set_invader_speed(void) { m_invader_speed = 0; }
 
 ///////////////////////////////////////////////////////////////////////////
 /////////////////-----------ACCESSOR FUNCTIONS-------------////////////////
@@ -279,6 +315,8 @@ bool StudentWorld::get_flying_saucer_count(void) const { return m_flying_saucer_
 int StudentWorld::get_invader_laser_count(void) const { return m_invader_laser_count; }
 
 int StudentWorld::get_current_invader_count(void) const { return m_current_invader_count; }
+
+int StudentWorld::get_invader_speed(void) const { return m_invader_speed; }
 
 ///////////////////////////////////////////////////////////////////////////
 //////////////-----------LASER-HANDLING FUNCTION-------------//////////////
@@ -294,37 +332,43 @@ void StudentWorld::check_collision(Actor* actor, bool is_player, bool is_invader
       // If laser hit the large invader
       if (m_actors[i]->get_id() == IID_LARGE_INVADER)
       {
-        if (actor->get_x() >= m_actors[i]->get_x() - 2 && actor->get_x() <= m_actors[i]->get_x() + 2 && actor->get_y() == m_actors[i]->get_y())
+        if (actor->get_x() >= m_actors[i]->get_x() - 2 && actor->get_x() <= m_actors[i]->get_x() + 2 &&
+            actor->get_y() + 2 >= m_actors[i]->get_y() && actor->get_y() - 2 <= m_actors[i]->get_y())
         {
           actor->set_dead();
           new InvaderExplosion(this, m_actors[i]->get_x(), m_actors[i]->get_y());
           m_actors[i]->set_dead();
           play_sound(SOUND_ALIEN_KILLED);
           increase_score(10);
+          update_invader_speed(1);
         }
       }
       // If laser hit the medium invader
       if (m_actors[i]->get_id() == IID_MEDIUM_INVADER)
       {
-        if (actor->get_x() >= m_actors[i]->get_x() - 1.5 && actor->get_x() <= m_actors[i]->get_x() + 1.5 && actor->get_y() == m_actors[i]->get_y())
+        if (actor->get_x() >= m_actors[i]->get_x() - 1.5 && actor->get_x() <= m_actors[i]->get_x() + 1.5 &&
+            actor->get_y() + 2 >= m_actors[i]->get_y() && actor->get_y() - 2 <= m_actors[i]->get_y())
         {
           actor->set_dead();
           new InvaderExplosion(this, m_actors[i]->get_x(), m_actors[i]->get_y());
           m_actors[i]->set_dead();
           play_sound(SOUND_ALIEN_KILLED);
           increase_score(20);
+          update_invader_speed(1);
         }
       }
       // If laser hit the small invader
       if (m_actors[i]->get_id() == IID_SMALL_INVADER)
       {
-        if (actor->get_x() >= m_actors[i]->get_x() - 1 && actor->get_x() <= m_actors[i]->get_x() + 1 && actor->get_y() == m_actors[i]->get_y())
+        if (actor->get_x() >= m_actors[i]->get_x() - 1 && actor->get_x() <= m_actors[i]->get_x() + 1 &&
+            actor->get_y() + 2 >= m_actors[i]->get_y() && actor->get_y() - 2 <= m_actors[i]->get_y())
         {
           actor->set_dead();
           new InvaderExplosion(this, m_actors[i]->get_x(), m_actors[i]->get_y());
           m_actors[i]->set_dead();
           play_sound(SOUND_ALIEN_KILLED);
           increase_score(30);
+          update_invader_speed(1);
         }
       }
       if (m_actors[i]->get_id() == IID_FLYING_SAUCER)
@@ -405,6 +449,17 @@ bool StudentWorld::is_invader_below(LargeInvader* invader)
 ///////////////////////////////////////////////////////////////////////////
 /////////////-----------INVADER-MOVEMENT FUNCTION-------------/////////////
 ///////////////////////////////////////////////////////////////////////////
+
+void StudentWorld::reset_original_invader_speed(void)
+{
+  for (int i = 0; i < m_actors.size(); i++)
+  {
+    if (m_actors[i]->get_id() == IID_LARGE_INVADER || m_actors[i]->get_id() == IID_MEDIUM_INVADER || m_actors[i]->get_id() == IID_SMALL_INVADER)
+    {
+      dynamic_cast<LargeInvader*>(m_actors[i])->set_max_ticks(25);
+    }
+  }
+}
 
 ///////////////////////////////////////////////////////////////////////////
 /////////////-----------MATH/MATH HELPER FUNCTIONS-------------////////////
