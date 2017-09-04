@@ -137,7 +137,6 @@ int StudentWorld::move()
   // Adjust the speed of the invaders for each round
   if (get_invader_speed() >= (3 * m_multiple))
   {
-    cout << "ENTER: " << get_invader_speed() << endl;
     for (int i = 0; i < m_actors.size(); i++)
     {
       if (m_actors[i]->get_id() == IID_LARGE_INVADER || m_actors[i]->get_id() == IID_MEDIUM_INVADER || m_actors[i]->get_id() == IID_SMALL_INVADER)
@@ -270,8 +269,8 @@ void StudentWorld::update_scoreboard()
   int level = get_level();
   int lives = get_lives();
   // Convert parameters to strings
-  string score_text = "Scr: " + std::string(6 - std::to_string(score).size(), '0') + std::to_string(score) + " ";
-  string level_text = "Lvl: " + std::string(2 - std::to_string(level).size(), ' ') + std::to_string(level) + " ";
+  string score_text = "Score: " + std::string(6 - std::to_string(score).size(), '0') + std::to_string(score) + " ";
+  string level_text = "Level: " + std::string(2 - std::to_string(level).size(), ' ') + std::to_string(level) + " ";
   string lives_text = "Lives: " + std::to_string(lives) + " ";
 
   string text = score_text + level_text + lives_text;
@@ -338,7 +337,7 @@ void StudentWorld::check_collision(Actor* actor, bool is_player, bool is_invader
           actor->set_dead();
           new InvaderExplosion(this, m_actors[i]->get_x(), m_actors[i]->get_y());
           m_actors[i]->set_dead();
-          play_sound(SOUND_ALIEN_KILLED);
+          play_sound(SOUND_INVADER_KILLED);
           increase_score(10);
           update_invader_speed(1);
         }
@@ -352,7 +351,7 @@ void StudentWorld::check_collision(Actor* actor, bool is_player, bool is_invader
           actor->set_dead();
           new InvaderExplosion(this, m_actors[i]->get_x(), m_actors[i]->get_y());
           m_actors[i]->set_dead();
-          play_sound(SOUND_ALIEN_KILLED);
+          play_sound(SOUND_INVADER_KILLED);
           increase_score(20);
           update_invader_speed(1);
         }
@@ -366,7 +365,7 @@ void StudentWorld::check_collision(Actor* actor, bool is_player, bool is_invader
           actor->set_dead();
           new InvaderExplosion(this, m_actors[i]->get_x(), m_actors[i]->get_y());
           m_actors[i]->set_dead();
-          play_sound(SOUND_ALIEN_KILLED);
+          play_sound(SOUND_INVADER_KILLED);
           increase_score(30);
           update_invader_speed(1);
         }
@@ -406,10 +405,10 @@ void StudentWorld::check_collision(Actor* actor, bool is_player, bool is_invader
       play_sound(SOUND_PLAYER_KILLED);
     }
     // Invader projectile hit the bottom border
-    if (actor->get_y() == BORDER_HEIGHT)
+    if (actor->get_y() == BORDER_HEIGHT + 1)
     {
-      play_sound(SOUND_PLAYER_KILLED);
-      new PlayerExplosion(this, actor->get_x(), actor->get_y() + 1);
+//      play_sound(SOUND_PLAYER_KILLED);
+//      new PlayerExplosion(this, actor->get_x(), actor->get_y() + 1);
     }
   }
 }

@@ -122,7 +122,7 @@ void GameController::init_drawers_and_sounds(void)
     make_pair(SOUND_ALIEN_MOVE_3,   "fastinvader3.wav"),
     make_pair(SOUND_ALIEN_MOVE_4,   "fastinvader4.wav"),
     make_pair(SOUND_PLAYER_KILLED,  "explosion.wav"),
-    make_pair(SOUND_ALIEN_KILLED,   "invaderkilled.wav"),
+    make_pair(SOUND_INVADER_KILLED,   "invaderkilled.wav"),
     make_pair(SOUND_LASER,          "shoot.wav"),
     make_pair(SOUND_SAUCER_MOVE_1,  "ufo_lowpitch.wav"),
     make_pair(SOUND_SAUCER_MOVE_2,  "ufo_highpitch.wav"),

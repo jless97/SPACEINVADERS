@@ -107,11 +107,11 @@ void Spaceship::do_something(void)
         break;
       // Left
       case KEY_PRESS_LEFT:
-        if (x > 0) { move_to(x - 1, y); }
+        if (x > 0) { move_to(x - 4, y); }
         break;
       // Right
       case KEY_PRESS_RIGHT:
-        if (x < VIEW_WIDTH - 1) { move_to(x + 1, y); }
+        if (x < 60) { move_to(x + 4, y); }
         break;
       default:
         break;
@@ -249,11 +249,15 @@ SmallInvader::~SmallInvader() {}
 ///////////////////////////////////////////////////////////////////////////
 
 FlyingSaucer::FlyingSaucer(StudentWorld* world, int start_x, int start_y)
-: LargeInvader(world, start_x, start_y, 0, IID_FLYING_SAUCER, 1.0) { world->update_flying_saucer_count(true); }
+: Actor(world, IID_FLYING_SAUCER, start_x, start_y, Direction::right, 1.0, 0), m_can_move(true)
+{ world->add_actor(this); world->update_flying_saucer_count(true); }
 
 void FlyingSaucer::do_something(void)
 {
   if (!is_alive()) { return; } // Check the current status of the flying saucer
+  
+  if (!get_can_move()) { set_can_move(true); return; }
+  else { set_can_move(false); }
   
   int x = get_x(), y = get_y(); // Get the current coordinates of the flying saucer
   
@@ -261,6 +265,10 @@ void FlyingSaucer::do_something(void)
   
   if (x <= -5) { set_dead(); }
 }
+
+void FlyingSaucer::set_can_move(bool value) { m_can_move = value; }
+
+bool FlyingSaucer::get_can_move(void) const { return m_can_move; }
 
 FlyingSaucer::~FlyingSaucer() { world()->update_current_invader_count(1); world()->update_flying_saucer_count(false); }
 

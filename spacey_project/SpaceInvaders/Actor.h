@@ -170,14 +170,19 @@ private:
 ///////////////////////////////////////////////////////////////////////////
 
 // IID_FLYING_SAUCER
-class FlyingSaucer : public LargeInvader
+class FlyingSaucer : public Actor
 {
 public:
   FlyingSaucer(StudentWorld* world, int start_x, int start_y);
   virtual void do_something(void);
+  /* Mutator Functions */
+  void set_can_move(bool value);
+  /* Accessor Functions */
+  bool get_can_move(void) const;
   virtual ~FlyingSaucer();
   
 private:
+  bool m_can_move;
 };
 
 ///////////////////////////////////////////////////////////////////////////
