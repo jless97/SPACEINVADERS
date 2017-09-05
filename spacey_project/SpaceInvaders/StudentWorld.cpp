@@ -146,6 +146,7 @@ int StudentWorld::move()
     }
     m_multiple++;
   }
+  
   // If there is one invader left, increase its speed to some max (TODO: it moves faster in one direction than the other)
   if (get_current_invader_count() == 1)
   {
@@ -154,6 +155,19 @@ int StudentWorld::move()
       if (m_actors[i]->get_id() == IID_LARGE_INVADER || m_actors[i]->get_id() == IID_MEDIUM_INVADER || m_actors[i]->get_id() == IID_SMALL_INVADER)
       {
         dynamic_cast<LargeInvader*>(m_actors[i])->set_max_ticks(0);
+      }
+    }
+  }
+  
+  // If an invader hits the invasion line, end the game
+  for (int i = 0; i < m_actors.size(); i++)
+  {
+    if (m_actors[i]->get_id() == IID_LARGE_INVADER || m_actors[i]->get_id() == IID_MEDIUM_INVADER || m_actors[i]->get_id() == IID_SMALL_INVADER)
+    {
+      if (m_actors[i]->get_y() == BORDER_HEIGHT + 1)
+      {
+        play_sound(SOUND_THEME);
+        return GWSTATUS_PLAYER_LOST;
       }
     }
   }
@@ -255,7 +269,7 @@ void StudentWorld::add_initial_actors(void)
 void StudentWorld::add_additional_actors(void)
 {
   // Calculate the chance that a flying saucer will appear
-  if (rand() % 500 == 1)
+  if (rand() % 1000 == 1)
   {
     if (!get_flying_saucer_count())
     {
@@ -274,6 +288,7 @@ void StudentWorld::update_scoreboard()
   int score = get_score();
   int level = get_level();
   int lives = get_lives();
+  if (lives <= 0) { lives = 0; }
   // Convert parameters to strings
   string score_text = "Score: " + std::string(6 - std::to_string(score).size(), '0') + std::to_string(score) + " ";
   string level_text = "Level: " + std::string(2 - std::to_string(level).size(), ' ') + std::to_string(level) + " ";
@@ -327,67 +342,70 @@ int StudentWorld::get_invader_speed(void) const { return m_invader_speed; }
 //////////////-----------LASER-HANDLING FUNCTION-------------//////////////
 ///////////////////////////////////////////////////////////////////////////
 
-void StudentWorld::check_collision(Actor* actor, bool is_player, bool is_invader) {
+void StudentWorld::check_collision(Actor* actor, bool is_player, bool is_invader, bool is_projectile) {
   for (int i = 0; i < m_actors.size(); i++)
   {
     if (!m_actors[i]->is_alive()) { continue; } // To avoid doubling of one of the effects below (temporary fix)
     // Check if player spaceship's laser hit any invaders (or flying saucer)
     if (is_player)
     {
-      // If laser hit the large invader
-      if (m_actors[i]->get_id() == IID_LARGE_INVADER)
+      if (is_projectile)
       {
-        if (actor->get_x() >= m_actors[i]->get_x() - 2 && actor->get_x() <= m_actors[i]->get_x() + 2 &&
-            actor->get_y() + 2 >= m_actors[i]->get_y() && actor->get_y() - 2 <= m_actors[i]->get_y())
+        // If laser hit the large invader
+        if (m_actors[i]->get_id() == IID_LARGE_INVADER)
         {
-          actor->set_dead();
-          new InvaderExplosion(this, m_actors[i]->get_x(), m_actors[i]->get_y());
-          m_actors[i]->set_dead();
-          play_sound(SOUND_INVADER_KILLED);
-          increase_score(10);
-          update_invader_speed(1);
+          if (actor->get_x() >= m_actors[i]->get_x() - 2 && actor->get_x() <= m_actors[i]->get_x() + 2 &&
+              actor->get_y() + 2 >= m_actors[i]->get_y() && actor->get_y() - 2 <= m_actors[i]->get_y())
+          {
+            actor->set_dead();
+            new InvaderExplosion(this, m_actors[i]->get_x(), m_actors[i]->get_y());
+            m_actors[i]->set_dead();
+            play_sound(SOUND_INVADER_KILLED);
+            increase_score(10);
+            update_invader_speed(1);
+          }
         }
-      }
-      // If laser hit the medium invader
-      if (m_actors[i]->get_id() == IID_MEDIUM_INVADER)
-      {
-        if (actor->get_x() >= m_actors[i]->get_x() - 1.5 && actor->get_x() <= m_actors[i]->get_x() + 1.5 &&
-            actor->get_y() + 2 >= m_actors[i]->get_y() && actor->get_y() - 2 <= m_actors[i]->get_y())
+        // If laser hit the medium invader
+        if (m_actors[i]->get_id() == IID_MEDIUM_INVADER)
         {
-          actor->set_dead();
-          new InvaderExplosion(this, m_actors[i]->get_x(), m_actors[i]->get_y());
-          m_actors[i]->set_dead();
-          play_sound(SOUND_INVADER_KILLED);
-          increase_score(20);
-          update_invader_speed(1);
+          if (actor->get_x() >= m_actors[i]->get_x() - 1.5 && actor->get_x() <= m_actors[i]->get_x() + 1.5 &&
+              actor->get_y() + 2 >= m_actors[i]->get_y() && actor->get_y() - 2 <= m_actors[i]->get_y())
+          {
+            actor->set_dead();
+            new InvaderExplosion(this, m_actors[i]->get_x(), m_actors[i]->get_y());
+            m_actors[i]->set_dead();
+            play_sound(SOUND_INVADER_KILLED);
+            increase_score(20);
+            update_invader_speed(1);
+          }
         }
-      }
-      // If laser hit the small invader
-      if (m_actors[i]->get_id() == IID_SMALL_INVADER)
-      {
-        if (actor->get_x() >= m_actors[i]->get_x() - 1 && actor->get_x() <= m_actors[i]->get_x() + 1 &&
-            actor->get_y() + 2 >= m_actors[i]->get_y() && actor->get_y() - 2 <= m_actors[i]->get_y())
+        // If laser hit the small invader
+        if (m_actors[i]->get_id() == IID_SMALL_INVADER)
         {
-          actor->set_dead();
-          new InvaderExplosion(this, m_actors[i]->get_x(), m_actors[i]->get_y());
-          m_actors[i]->set_dead();
-          play_sound(SOUND_INVADER_KILLED);
-          increase_score(30);
-          update_invader_speed(1);
+          if (actor->get_x() >= m_actors[i]->get_x() - 1 && actor->get_x() <= m_actors[i]->get_x() + 1 &&
+              actor->get_y() + 2 >= m_actors[i]->get_y() && actor->get_y() - 2 <= m_actors[i]->get_y())
+          {
+            actor->set_dead();
+            new InvaderExplosion(this, m_actors[i]->get_x(), m_actors[i]->get_y());
+            m_actors[i]->set_dead();
+            play_sound(SOUND_INVADER_KILLED);
+            increase_score(30);
+            update_invader_speed(1);
+          }
         }
-      }
-      if (m_actors[i]->get_id() == IID_FLYING_SAUCER)
-      {
-        if (actor->get_x() >= m_actors[i]->get_x() - 2 && actor->get_x() <= m_actors[i]->get_x() + 2 && actor->get_y() == m_actors[i]->get_y())
+        if (m_actors[i]->get_id() == IID_FLYING_SAUCER)
         {
-          actor->set_dead();
-          m_actors[i]->set_dead();
-          play_sound(SOUND_SAUCER_MOVE_2);
-          /// TODO: Fix. This is just temporary
-          int flying_saucer_points = rand() % 10;
-          if (flying_saucer_points >= 0 && flying_saucer_points <= 4) { increase_score(150); }
-          else if (flying_saucer_points >=5 && flying_saucer_points <= 8) { increase_score(250); }
-          else { increase_score(300); }
+          if (actor->get_x() >= m_actors[i]->get_x() - 2 && actor->get_x() <= m_actors[i]->get_x() + 2 && actor->get_y() == m_actors[i]->get_y())
+          {
+            actor->set_dead();
+            m_actors[i]->set_dead();
+            play_sound(SOUND_SAUCER_MOVE_2);
+            /// TODO: Fix. This is just temporary
+            int flying_saucer_points = rand() % 10;
+            if (flying_saucer_points >= 0 && flying_saucer_points <= 4) { increase_score(150); }
+            else if (flying_saucer_points >=5 && flying_saucer_points <= 8) { increase_score(250); }
+            else { increase_score(300); }
+          }
         }
       }
     }
@@ -396,25 +414,28 @@ void StudentWorld::check_collision(Actor* actor, bool is_player, bool is_invader
   int count = 0;
   if (is_invader)
   {
-    // Invader projectile hit player spaceship
-    if (actor->get_x() >= m_spaceship->get_x() - 2 && actor->get_x() <= m_spaceship->get_x() + 2 &&
-        actor->get_y() + 2 >= m_spaceship->get_y() && actor->get_y() - 2 <= m_spaceship->get_y())
+    if (is_projectile)
     {
-      actor->set_dead();
-      m_spaceship->set_dead();
-      if (count == 0)
+      // Invader projectile hit player spaceship
+      if (actor->get_x() >= m_spaceship->get_x() - 2 && actor->get_x() <= m_spaceship->get_x() + 2 &&
+          actor->get_y() + 2 >= m_spaceship->get_y() && actor->get_y() - 2 <= m_spaceship->get_y())
       {
-        count = 1;
-        dec_lives();
+        actor->set_dead();
+        m_spaceship->set_dead();
+        if (count == 0)
+        {
+          count = 1;
+          dec_lives();
+        }
+        new PlayerExplosion(this, actor->get_x(), actor->get_y());
+        play_sound(SOUND_PLAYER_KILLED);
       }
-      new PlayerExplosion(this, actor->get_x(), actor->get_y());
-      play_sound(SOUND_PLAYER_KILLED);
-    }
-    // Invader projectile hit the bottom border
-    if (actor->get_y() == BORDER_HEIGHT + 1)
-    {
-//      play_sound(SOUND_PLAYER_KILLED);
-//      new PlayerExplosion(this, actor->get_x(), actor->get_y() + 1);
+      // Invader projectile hit the bottom border
+      if (actor->get_y() == BORDER_HEIGHT + 1)
+      {
+  //      play_sound(SOUND_PLAYER_KILLED);
+  //      new PlayerExplosion(this, actor->get_x(), actor->get_y() + 1);
+      }
     }
   }
 }

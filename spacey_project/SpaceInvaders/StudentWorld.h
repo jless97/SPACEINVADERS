@@ -66,7 +66,8 @@ public:
   int get_current_invader_count(void) const;        // Returns the number of invaders left to destroy before completing the current level
   int get_invader_speed(void) const;                // Returns the speed of the invaders for a given round
   /* Laser Handling Functions */
-  void check_collision(Actor* actor, bool is_player=true, bool is_invader=false); // Checks if there were any collisions between actor objects
+  // Checks if there were any collisions between actor objects
+  void check_collision(Actor* actor, bool is_player=true, bool is_invader=false, bool is_projectile=false);
   bool is_invader_below(LargeInvader* invader);     // Returns true if there is an invader in the same column, that is a row beneath the invader
   /* Invader Movement Functions */
   void reset_original_invader_speed(void);          // Resets each invader to their original movement speed upon the start of each new round

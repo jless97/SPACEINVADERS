@@ -107,7 +107,7 @@ void Spaceship::do_something(void)
         break;
       // Left
       case KEY_PRESS_LEFT:
-        if (x > 2) { move_to(x - 4, y); }
+        if (x > 4) { move_to(x - 4, y); }
         break;
       // Right
       case KEY_PRESS_RIGHT:
@@ -139,7 +139,7 @@ void LargeInvader::do_something(void)
   StudentWorld* invader_world = world(); // Grab a pointer to the StudentWorld
 
   int x = get_x(), y = get_y(); // Get the current coordinates of the invader object
-    
+  
   if (!is_alive()) { return; } // Check the current status of the invader object
   
   // Update invader movement
@@ -168,7 +168,7 @@ void LargeInvader::do_something(void)
   if (invader_world->get_invader_laser_count() < 3)
   {
     // Chance an invader will shoot a laser
-    if (rand() % 40 == 1)
+    if (rand() % 50 == 1)
     {
       // Chance it is a faster laser
       if (rand() % 10 == 1)
@@ -189,7 +189,6 @@ void LargeInvader::do_something(void)
       {
         if (!invader_world->is_invader_below(this)) { new SlowLaser(invader_world, x, y - 1, Laser::LaserClass::slow_laser); }
       }
-      
     }
   }
 }
@@ -300,39 +299,39 @@ void Laser::do_something(void)
   switch (get_projectile_viewpoint())
   {
     case LaserClass::player_laser:
-      laser_world->check_collision(this, true, false); // Check if the laser collided with any aliens
+      laser_world->check_collision(this, true, false, true); // Check if the laser collided with any aliens
       if (!is_alive()) { return; } // Check the current status of the laser
       move_to(x, y + 2); // If no collision, then update position
       if (y >= VIEW_HEIGHT - 1) { set_dead(); }
       if (!is_alive()) { return; } // Check the current status of the laser
-      laser_world->check_collision(this, true, false); // Check if the laser collided with any spaceships
+      laser_world->check_collision(this, true, false, true); // Check if the laser collided with any spaceships
       if (!is_alive()) { return; } // Check the current status of the laser
       break;
     case LaserClass::slow_laser:
-      laser_world->check_collision(this, false, true); // Check if the laser hit the player spaceship (or barrier)
+      laser_world->check_collision(this, false, true, true); // Check if the laser hit the player spaceship (or barrier)
       if (!is_alive()) { return; } // Check the current status of the laser
       move_to(x, y - 1); // If no collision, then update position
       if (y <= BORDER_HEIGHT) { set_dead(); }
       if (!is_alive()) { return; } // Check the current status of the laser
-      laser_world->check_collision(this, false, true); // Check if the laser hit the player spaceship (or barrier)
+      laser_world->check_collision(this, false, true, true); // Check if the laser hit the player spaceship (or barrier)
       if (!is_alive()) { return; } // Check the current status of the laser
       break;
     case LaserClass::medium_laser:
-      laser_world->check_collision(this, false, true); // Check if the laser hit the player spaceship (or barrier)
+      laser_world->check_collision(this, false, true, true); // Check if the laser hit the player spaceship (or barrier)
       if (!is_alive()) { return; } // Check the current status of the laser
       move_to(x, y - 1.5); // If no collision, then update position
       if (y <= BORDER_HEIGHT) { set_dead(); }
       if (!is_alive()) { return; } // Check the current status of the laser
-      laser_world->check_collision(this, false, true); // Check if the laser hit the player spaceship (or barrier)
+      laser_world->check_collision(this, false, true, true); // Check if the laser hit the player spaceship (or barrier)
       if (!is_alive()) { return; } // Check the current status of the laser
       break;
     case LaserClass::fast_laser:
-      laser_world->check_collision(this, false, true); // Check if the laser hit the player spaceship (or barrier)
+      laser_world->check_collision(this, false, true, true); // Check if the laser hit the player spaceship (or barrier)
       if (!is_alive()) { return; } // Check the current status of the laser
       move_to(x, y - 2); // If no collision, then update position
       if (y <= BORDER_HEIGHT) { set_dead(); }
       if (!is_alive()) { return; } // Check the current status of the laser
-      laser_world->check_collision(this, false, true); // Check if the laser hit the player spaceship (or barrier)
+      laser_world->check_collision(this, false, true, true); // Check if the laser hit the player spaceship (or barrier)
       if (!is_alive()) { return; } // Check the current status of the laser
       break;
     default:

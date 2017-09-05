@@ -97,7 +97,7 @@ private:
 class Spaceship : public Actor
 {
 public:
-  Spaceship(StudentWorld* world, int start_x=30, int start_y=4, int image_id=IID_SPACESHIP, double image_size=1.0);
+  Spaceship(StudentWorld* world, int start_x=34, int start_y=4, int image_id=IID_SPACESHIP, double image_size=1.0);
   virtual void do_something(void);
   virtual ~Spaceship();
   

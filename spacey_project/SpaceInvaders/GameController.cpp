@@ -294,7 +294,7 @@ void GameController::do_something()
 		case not_applicable:
 			break;
 		case welcome:
-			//play_sound(SOUND_THEME);
+			play_sound(SOUND_THEME);
 			m_main_message = "Space Invaders";
 			m_second_message = "Press Enter to begin play...";
 			set_game_state(prompt);
