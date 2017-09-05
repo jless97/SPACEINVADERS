@@ -494,7 +494,7 @@ void StudentWorld::init_border(void)
   {
     for (int j = 0; j < 1; j++)
     {
-      m_border[i][j] = new Border(this, i, j + 1);
+      m_border[i][j] = new Border(this, i + 1, j + 1);
     }
   }
 }

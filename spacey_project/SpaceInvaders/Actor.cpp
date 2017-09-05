@@ -107,7 +107,7 @@ void Spaceship::do_something(void)
         break;
       // Left
       case KEY_PRESS_LEFT:
-        if (x > 0) { move_to(x - 4, y); }
+        if (x > 2) { move_to(x - 4, y); }
         break;
       // Right
       case KEY_PRESS_RIGHT:
@@ -320,7 +320,7 @@ void Laser::do_something(void)
     case LaserClass::medium_laser:
       laser_world->check_collision(this, false, true); // Check if the laser hit the player spaceship (or barrier)
       if (!is_alive()) { return; } // Check the current status of the laser
-      move_to(x, y - 1); // If no collision, then update position
+      move_to(x, y - 1.5); // If no collision, then update position
       if (y <= BORDER_HEIGHT) { set_dead(); }
       if (!is_alive()) { return; } // Check the current status of the laser
       laser_world->check_collision(this, false, true); // Check if the laser hit the player spaceship (or barrier)
