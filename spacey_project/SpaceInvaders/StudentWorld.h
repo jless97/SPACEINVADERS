@@ -43,6 +43,7 @@ public:
   virtual int init();                               // Initialize the FrackMan universe (and initial actor objects)
   virtual int move();                               // Update the actor objects in the current level
   virtual void clean_up();                          // Reset a level (due to a player death or completion of a level)
+  virtual void revive();                            // Revive the player spaceship
   void add_actor(Actor* actor);                     // Add a new actor to StudentWorld
   void add_initial_actors(void);                    // Add initial actors
   void add_additional_actors(void);                 // Add additional actors

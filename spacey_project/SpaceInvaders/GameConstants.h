@@ -68,10 +68,11 @@ const double SPRITE_HEIGHT_GL = .5; // note - this is tied implicitly to SPRITE_
 ///////////////----------- STATUS OF EACH TICK--------------///////////////
 ///////////////////////////////////////////////////////////////////////////
 
-const int GWSTATUS_PLAYER_DIED	 = 0;
+const int GWSTATUS_PLAYER_DIED   = 0;
 const int GWSTATUS_CONTINUE_GAME = 1;
 const int GWSTATUS_PLAYER_WON	 = 2;
 const int GWSTATUS_FINISHED_LEVEL= 3;
-const int GWSTATUS_LEVEL_ERROR	 = 4;
+const int GWSTATUS_PLAYER_LOST	 = 4;
+const int GWSTATUS_LEVEL_ERROR	 = 5;
 
 #endif // GAMECONSTANTS_H_

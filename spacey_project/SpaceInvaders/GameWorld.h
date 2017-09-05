@@ -37,6 +37,7 @@ public:
   virtual int init() = 0;                           // Initialize the game world
   virtual int move() = 0;                           // Ask each actor to do something
   virtual void clean_up() = 0;                      // Clean up actors
+  virtual void revive() = 0;                        // Revive the player spaceship
   void set_game_stat_text(std::string text);        // Initialize the scoreboard
   bool get_key(int& value);                         // Get user input from keyboard
   void play_sound(int sound_id);                    // Play object sound

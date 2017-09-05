@@ -309,7 +309,7 @@ void GameController::do_something()
 			m_next_state_after_animate = not_applicable;
 			{
 				int status = m_gw->move();
-				if (status == GWSTATUS_PLAYER_DIED)
+				if (status == GWSTATUS_PLAYER_LOST)
 				{
           // animate one last frame so the player can see what happened
           m_next_state_after_animate = gameover;
@@ -319,6 +319,10 @@ void GameController::do_something()
 					m_gw->advance_to_next_level();
 					m_next_state_after_animate = finishedlevel;
 				}
+        else if (status == GWSTATUS_PLAYER_DIED)
+        {
+          m_gw->revive();
+        }
 			}
 			set_game_state(animate);
 			break;

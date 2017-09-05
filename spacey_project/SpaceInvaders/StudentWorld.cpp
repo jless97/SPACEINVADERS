@@ -163,7 +163,7 @@ int StudentWorld::move()
   if (!m_spaceship->is_alive())
   {
     if (wait_to_spawn < 50) { wait_to_spawn++; }
-    else { wait_to_spawn = 0; m_spaceship->move_to(30, 4); m_spaceship->set_alive(); }
+    else { wait_to_spawn = 0;  return GWSTATUS_PLAYER_DIED; }
   }
   
   // If the player destroyed all 55 aliens in a round, then advance to the next round
@@ -178,7 +178,7 @@ int StudentWorld::move()
     else { it++; }
   }
   
-  if (get_lives() <= 0) { return GWSTATUS_PLAYER_DIED; }
+  if (get_lives() <= 0) { return GWSTATUS_PLAYER_LOST; }
   
   return GWSTATUS_CONTINUE_GAME; // Continue with the level until one of the above conditions happens
 }
@@ -195,6 +195,12 @@ void StudentWorld::clean_up()
   delete m_spaceship; // Remove player spaceship
   
   deinit_border(); // Remove border
+}
+
+void StudentWorld::revive()
+{
+  delete m_spaceship;
+  m_spaceship = new Spaceship(this);
 }
 
 ///////////////////////////////////////////////////////////////////////////

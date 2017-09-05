@@ -270,7 +270,7 @@ void FlyingSaucer::set_can_move(bool value) { m_can_move = value; }
 
 bool FlyingSaucer::get_can_move(void) const { return m_can_move; }
 
-FlyingSaucer::~FlyingSaucer() { world()->update_current_invader_count(1); world()->update_flying_saucer_count(false); }
+FlyingSaucer::~FlyingSaucer() { world()->update_flying_saucer_count(false); }
 
 ///////////////////////////////////////////////////////////////////////////
 //////////////////////-----------BARRIER--------------/////////////////////
